@@ -1,0 +1,1146 @@
+State 61 conflicts: 1 shift/reduce
+State 65 conflicts: 4 shift/reduce
+
+
+Grammar
+
+    0 $accept: smtlib $end
+
+    1 primary_expression: TK_ID
+    2                   | TK_CT
+
+    3 unary_expression: primary_expression
+    4                 | TK_MI_OP primary_expression
+
+    5 expression: unary_expression
+    6           | expression TK_PL_OP expression
+    7           | expression TK_MI_OP expression
+    8           | TK_LB TK_DI_OP expression TK_CMM expression TK_RB
+    9           | TK_LB TK_MO_OP expression TK_CMM expression TK_RB
+   10           | expression TK_MU_OP expression
+   11           | TK_LB expression TK_RB
+
+   12 assignment_expression: unary_expression TK_ASS_OP expression
+   13                      | TK_LB assignment_expression TK_RB
+
+   14 relational_operator: TK_LT_OP
+   15                    | TK_GT_OP
+   16                    | TK_LE_OP
+   17                    | TK_GE_OP
+   18                    | TK_EQ_OP
+   19                    | TK_NE_OP
+   20                    | TK_ASS_OP
+
+   21 primary_conditional_expression: expression relational_operator expression
+
+   22 conditional_expression: primary_conditional_expression
+   23                       | conditional_expression TK_AND_OP conditional_expression
+   24                       | conditional_expression TK_IMP_OP conditional_expression
+   25                       | conditional_expression TK_OR_OP conditional_expression
+   26                       | conditional_expression TK_EQ_OP conditional_expression
+   27                       | TK_LB conditional_expression TK_RB
+   28                       | TK_NOT_OP TK_LB conditional_expression TK_RB
+
+   29 assignment_statement: assignment_expression TK_ST_END
+
+   30 assignments: assignment_statement
+   31            | assignment_statement assignments
+
+   32 mixed_statements: assignments
+   33                 | decision
+   34                 | assignments mixed_statements
+   35                 | decision mixed_statements
+
+   36 innerblock: assignment_statement
+   37           | decision
+   38           | TK_LP mixed_statements TK_RP
+
+   39 decision: TK_IF conditional_expression innerblock
+   40         | TK_IF conditional_expression innerblock TK_ELSE innerblock
+
+   41 assertions: assignment_statement
+   42           | decision
+   43           | assignment_statement assertions
+   44           | decision assertions
+
+   45 smtlib: assertions
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+TK_MU_OP (258) 10
+TK_PL_OP (259) 6
+TK_UMI (260)
+TK_LT_OP (261) 14
+TK_NOT_OP (262) 28
+TK_AND_OP (263) 23
+TK_OR_OP (264) 25
+TK_IMP_OP (265) 24
+TK_ID (266) 1
+TK_CT (267) 2
+TK_CMM (268) 8 9
+TK_LB (269) 8 9 11 13 27 28
+TK_LP (270) 38
+TK_RB (271) 8 9 11 13 27 28
+TK_RP (272) 38
+TK_GT_OP (273) 15
+TK_LE_OP (274) 16
+TK_GE_OP (275) 17
+TK_EQ_OP (276) 18 26
+TK_NE_OP (277) 19
+TK_ASS_OP (278) 12 20
+TK_MI_OP (279) 4 7
+TK_DI_OP (280) 8
+TK_MO_OP (281) 9
+TK_IF (282) 39 40
+TK_ELSE (283) 40
+TK_ST_END (284) 29
+
+
+Nonterminals, with rules where they appear
+
+$accept (30)
+    on left: 0
+primary_expression (31)
+    on left: 1 2, on right: 3 4
+unary_expression (32)
+    on left: 3 4, on right: 5 12
+expression (33)
+    on left: 5 6 7 8 9 10 11, on right: 6 7 8 9 10 11 12 21
+assignment_expression (34)
+    on left: 12 13, on right: 13 29
+relational_operator (35)
+    on left: 14 15 16 17 18 19 20, on right: 21
+primary_conditional_expression (36)
+    on left: 21, on right: 22
+conditional_expression (37)
+    on left: 22 23 24 25 26 27 28, on right: 23 24 25 26 27 28 39 40
+assignment_statement (38)
+    on left: 29, on right: 30 31 36 41 43
+assignments (39)
+    on left: 30 31, on right: 31 32 34
+mixed_statements (40)
+    on left: 32 33 34 35, on right: 34 35 38
+innerblock (41)
+    on left: 36 37 38, on right: 39 40
+decision (42)
+    on left: 39 40, on right: 33 35 37 42 44
+assertions (43)
+    on left: 41 42 43 44, on right: 43 44 45
+smtlib (44)
+    on left: 45, on right: 0
+
+
+State 0
+
+    0 $accept: . smtlib $end
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 9
+    decision               go to state 10
+    assertions             go to state 11
+    smtlib                 go to state 12
+
+
+State 1
+
+    1 primary_expression: TK_ID .
+
+    $default  reduce using rule 1 (primary_expression)
+
+
+State 2
+
+    2 primary_expression: TK_CT .
+
+    $default  reduce using rule 2 (primary_expression)
+
+
+State 3
+
+   13 assignment_expression: TK_LB . assignment_expression TK_RB
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 13
+
+
+State 4
+
+    4 unary_expression: TK_MI_OP . primary_expression
+
+    TK_ID  shift, and go to state 1
+    TK_CT  shift, and go to state 2
+
+    primary_expression  go to state 14
+
+
+State 5
+
+   39 decision: TK_IF . conditional_expression innerblock
+   40         | TK_IF . conditional_expression innerblock TK_ELSE innerblock
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 18
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 20
+
+
+State 6
+
+    3 unary_expression: primary_expression .
+
+    $default  reduce using rule 3 (unary_expression)
+
+
+State 7
+
+   12 assignment_expression: unary_expression . TK_ASS_OP expression
+
+    TK_ASS_OP  shift, and go to state 21
+
+
+State 8
+
+   29 assignment_statement: assignment_expression . TK_ST_END
+
+    TK_ST_END  shift, and go to state 22
+
+
+State 9
+
+   41 assertions: assignment_statement .
+   43           | assignment_statement . assertions
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    $default  reduce using rule 41 (assertions)
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 9
+    decision               go to state 10
+    assertions             go to state 23
+
+
+State 10
+
+   42 assertions: decision .
+   44           | decision . assertions
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    $default  reduce using rule 42 (assertions)
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 9
+    decision               go to state 10
+    assertions             go to state 24
+
+
+State 11
+
+   45 smtlib: assertions .
+
+    $default  reduce using rule 45 (smtlib)
+
+
+State 12
+
+    0 $accept: smtlib . $end
+
+    $end  shift, and go to state 25
+
+
+State 13
+
+   13 assignment_expression: TK_LB assignment_expression . TK_RB
+
+    TK_RB  shift, and go to state 26
+
+
+State 14
+
+    4 unary_expression: TK_MI_OP primary_expression .
+
+    $default  reduce using rule 4 (unary_expression)
+
+
+State 15
+
+   28 conditional_expression: TK_NOT_OP . TK_LB conditional_expression TK_RB
+
+    TK_LB  shift, and go to state 27
+
+
+State 16
+
+    8 expression: TK_LB . TK_DI_OP expression TK_CMM expression TK_RB
+    9           | TK_LB . TK_MO_OP expression TK_CMM expression TK_RB
+   11           | TK_LB . expression TK_RB
+   27 conditional_expression: TK_LB . conditional_expression TK_RB
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+    TK_DI_OP   shift, and go to state 28
+    TK_MO_OP   shift, and go to state 29
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 30
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 31
+
+
+State 17
+
+    5 expression: unary_expression .
+
+    $default  reduce using rule 5 (expression)
+
+
+State 18
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+   21 primary_conditional_expression: expression . relational_operator expression
+
+    TK_MU_OP   shift, and go to state 32
+    TK_PL_OP   shift, and go to state 33
+    TK_LT_OP   shift, and go to state 34
+    TK_GT_OP   shift, and go to state 35
+    TK_LE_OP   shift, and go to state 36
+    TK_GE_OP   shift, and go to state 37
+    TK_EQ_OP   shift, and go to state 38
+    TK_NE_OP   shift, and go to state 39
+    TK_ASS_OP  shift, and go to state 40
+    TK_MI_OP   shift, and go to state 41
+
+    relational_operator  go to state 42
+
+
+State 19
+
+   22 conditional_expression: primary_conditional_expression .
+
+    $default  reduce using rule 22 (conditional_expression)
+
+
+State 20
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+   39 decision: TK_IF conditional_expression . innerblock
+   40         | TK_IF conditional_expression . innerblock TK_ELSE innerblock
+
+    TK_AND_OP  shift, and go to state 43
+    TK_OR_OP   shift, and go to state 44
+    TK_IMP_OP  shift, and go to state 45
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 3
+    TK_LP      shift, and go to state 46
+    TK_EQ_OP   shift, and go to state 47
+    TK_MI_OP   shift, and go to state 4
+    TK_IF      shift, and go to state 5
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 48
+    innerblock             go to state 49
+    decision               go to state 50
+
+
+State 21
+
+   12 assignment_expression: unary_expression TK_ASS_OP . expression
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 52
+
+
+State 22
+
+   29 assignment_statement: assignment_expression TK_ST_END .
+
+    $default  reduce using rule 29 (assignment_statement)
+
+
+State 23
+
+   43 assertions: assignment_statement assertions .
+
+    $default  reduce using rule 43 (assertions)
+
+
+State 24
+
+   44 assertions: decision assertions .
+
+    $default  reduce using rule 44 (assertions)
+
+
+State 25
+
+    0 $accept: smtlib $end .
+
+    $default  accept
+
+
+State 26
+
+   13 assignment_expression: TK_LB assignment_expression TK_RB .
+
+    $default  reduce using rule 13 (assignment_expression)
+
+
+State 27
+
+   28 conditional_expression: TK_NOT_OP TK_LB . conditional_expression TK_RB
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 18
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 53
+
+
+State 28
+
+    8 expression: TK_LB TK_DI_OP . expression TK_CMM expression TK_RB
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 54
+
+
+State 29
+
+    9 expression: TK_LB TK_MO_OP . expression TK_CMM expression TK_RB
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 55
+
+
+State 30
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+   11           | TK_LB expression . TK_RB
+   21 primary_conditional_expression: expression . relational_operator expression
+
+    TK_MU_OP   shift, and go to state 32
+    TK_PL_OP   shift, and go to state 33
+    TK_LT_OP   shift, and go to state 34
+    TK_RB      shift, and go to state 56
+    TK_GT_OP   shift, and go to state 35
+    TK_LE_OP   shift, and go to state 36
+    TK_GE_OP   shift, and go to state 37
+    TK_EQ_OP   shift, and go to state 38
+    TK_NE_OP   shift, and go to state 39
+    TK_ASS_OP  shift, and go to state 40
+    TK_MI_OP   shift, and go to state 41
+
+    relational_operator  go to state 42
+
+
+State 31
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+   27                       | TK_LB conditional_expression . TK_RB
+
+    TK_AND_OP  shift, and go to state 43
+    TK_OR_OP   shift, and go to state 44
+    TK_IMP_OP  shift, and go to state 45
+    TK_RB      shift, and go to state 57
+    TK_EQ_OP   shift, and go to state 47
+
+
+State 32
+
+   10 expression: expression TK_MU_OP . expression
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 58
+
+
+State 33
+
+    6 expression: expression TK_PL_OP . expression
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 59
+
+
+State 34
+
+   14 relational_operator: TK_LT_OP .
+
+    $default  reduce using rule 14 (relational_operator)
+
+
+State 35
+
+   15 relational_operator: TK_GT_OP .
+
+    $default  reduce using rule 15 (relational_operator)
+
+
+State 36
+
+   16 relational_operator: TK_LE_OP .
+
+    $default  reduce using rule 16 (relational_operator)
+
+
+State 37
+
+   17 relational_operator: TK_GE_OP .
+
+    $default  reduce using rule 17 (relational_operator)
+
+
+State 38
+
+   18 relational_operator: TK_EQ_OP .
+
+    $default  reduce using rule 18 (relational_operator)
+
+
+State 39
+
+   19 relational_operator: TK_NE_OP .
+
+    $default  reduce using rule 19 (relational_operator)
+
+
+State 40
+
+   20 relational_operator: TK_ASS_OP .
+
+    $default  reduce using rule 20 (relational_operator)
+
+
+State 41
+
+    7 expression: expression TK_MI_OP . expression
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 60
+
+
+State 42
+
+   21 primary_conditional_expression: expression relational_operator . expression
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 61
+
+
+State 43
+
+   23 conditional_expression: conditional_expression TK_AND_OP . conditional_expression
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 18
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 62
+
+
+State 44
+
+   25 conditional_expression: conditional_expression TK_OR_OP . conditional_expression
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 18
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 63
+
+
+State 45
+
+   24 conditional_expression: conditional_expression TK_IMP_OP . conditional_expression
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 18
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 64
+
+
+State 46
+
+   38 innerblock: TK_LP . mixed_statements TK_RP
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 65
+    assignments            go to state 66
+    mixed_statements       go to state 67
+    decision               go to state 68
+
+
+State 47
+
+   26 conditional_expression: conditional_expression TK_EQ_OP . conditional_expression
+
+    TK_NOT_OP  shift, and go to state 15
+    TK_ID      shift, and go to state 1
+    TK_CT      shift, and go to state 2
+    TK_LB      shift, and go to state 16
+    TK_MI_OP   shift, and go to state 4
+
+    primary_expression              go to state 6
+    unary_expression                go to state 17
+    expression                      go to state 18
+    primary_conditional_expression  go to state 19
+    conditional_expression          go to state 69
+
+
+State 48
+
+   36 innerblock: assignment_statement .
+
+    $default  reduce using rule 36 (innerblock)
+
+
+State 49
+
+   39 decision: TK_IF conditional_expression innerblock .
+   40         | TK_IF conditional_expression innerblock . TK_ELSE innerblock
+
+    TK_ELSE  shift, and go to state 70
+
+    $default  reduce using rule 39 (decision)
+
+
+State 50
+
+   37 innerblock: decision .
+
+    $default  reduce using rule 37 (innerblock)
+
+
+State 51
+
+    8 expression: TK_LB . TK_DI_OP expression TK_CMM expression TK_RB
+    9           | TK_LB . TK_MO_OP expression TK_CMM expression TK_RB
+   11           | TK_LB . expression TK_RB
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+    TK_DI_OP  shift, and go to state 28
+    TK_MO_OP  shift, and go to state 29
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 71
+
+
+State 52
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+   12 assignment_expression: unary_expression TK_ASS_OP expression .
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_MI_OP  shift, and go to state 41
+
+    $default  reduce using rule 12 (assignment_expression)
+
+
+State 53
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+   28                       | TK_NOT_OP TK_LB conditional_expression . TK_RB
+
+    TK_AND_OP  shift, and go to state 43
+    TK_OR_OP   shift, and go to state 44
+    TK_IMP_OP  shift, and go to state 45
+    TK_RB      shift, and go to state 72
+    TK_EQ_OP   shift, and go to state 47
+
+
+State 54
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+    8           | TK_LB TK_DI_OP expression . TK_CMM expression TK_RB
+   10           | expression . TK_MU_OP expression
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_CMM    shift, and go to state 73
+    TK_MI_OP  shift, and go to state 41
+
+
+State 55
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+    9           | TK_LB TK_MO_OP expression . TK_CMM expression TK_RB
+   10           | expression . TK_MU_OP expression
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_CMM    shift, and go to state 74
+    TK_MI_OP  shift, and go to state 41
+
+
+State 56
+
+   11 expression: TK_LB expression TK_RB .
+
+    $default  reduce using rule 11 (expression)
+
+
+State 57
+
+   27 conditional_expression: TK_LB conditional_expression TK_RB .
+
+    $default  reduce using rule 27 (conditional_expression)
+
+
+State 58
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+   10           | expression TK_MU_OP expression .
+
+    $default  reduce using rule 10 (expression)
+
+
+State 59
+
+    6 expression: expression . TK_PL_OP expression
+    6           | expression TK_PL_OP expression .
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+
+    TK_MU_OP  shift, and go to state 32
+
+    $default  reduce using rule 6 (expression)
+
+
+State 60
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+    7           | expression TK_MI_OP expression .
+   10           | expression . TK_MU_OP expression
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+
+    $default  reduce using rule 7 (expression)
+
+
+State 61
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+   21 primary_conditional_expression: expression relational_operator expression .
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_MI_OP  shift, and go to state 41
+
+    TK_MI_OP  [reduce using rule 21 (primary_conditional_expression)]
+    $default  reduce using rule 21 (primary_conditional_expression)
+
+
+State 62
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   23                       | conditional_expression TK_AND_OP conditional_expression .
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+
+    TK_EQ_OP  shift, and go to state 47
+
+    $default  reduce using rule 23 (conditional_expression)
+
+
+State 63
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   25                       | conditional_expression TK_OR_OP conditional_expression .
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+
+    TK_AND_OP  shift, and go to state 43
+    TK_EQ_OP   shift, and go to state 47
+
+    $default  reduce using rule 25 (conditional_expression)
+
+
+State 64
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   24                       | conditional_expression TK_IMP_OP conditional_expression .
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+
+    TK_AND_OP  shift, and go to state 43
+    TK_OR_OP   shift, and go to state 44
+    TK_IMP_OP  shift, and go to state 45
+    TK_EQ_OP   shift, and go to state 47
+
+    $default  reduce using rule 24 (conditional_expression)
+
+
+State 65
+
+   30 assignments: assignment_statement .
+   31            | assignment_statement . assignments
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+
+    TK_ID     [reduce using rule 30 (assignments)]
+    TK_CT     [reduce using rule 30 (assignments)]
+    TK_LB     [reduce using rule 30 (assignments)]
+    TK_MI_OP  [reduce using rule 30 (assignments)]
+    $default  reduce using rule 30 (assignments)
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 65
+    assignments            go to state 75
+
+
+State 66
+
+   32 mixed_statements: assignments .
+   34                 | assignments . mixed_statements
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    $default  reduce using rule 32 (mixed_statements)
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 65
+    assignments            go to state 66
+    mixed_statements       go to state 76
+    decision               go to state 68
+
+
+State 67
+
+   38 innerblock: TK_LP mixed_statements . TK_RP
+
+    TK_RP  shift, and go to state 77
+
+
+State 68
+
+   33 mixed_statements: decision .
+   35                 | decision . mixed_statements
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    $default  reduce using rule 33 (mixed_statements)
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 65
+    assignments            go to state 66
+    mixed_statements       go to state 78
+    decision               go to state 68
+
+
+State 69
+
+   23 conditional_expression: conditional_expression . TK_AND_OP conditional_expression
+   24                       | conditional_expression . TK_IMP_OP conditional_expression
+   25                       | conditional_expression . TK_OR_OP conditional_expression
+   26                       | conditional_expression . TK_EQ_OP conditional_expression
+   26                       | conditional_expression TK_EQ_OP conditional_expression .
+
+    $default  reduce using rule 26 (conditional_expression)
+
+
+State 70
+
+   40 decision: TK_IF conditional_expression innerblock TK_ELSE . innerblock
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 3
+    TK_LP     shift, and go to state 46
+    TK_MI_OP  shift, and go to state 4
+    TK_IF     shift, and go to state 5
+
+    primary_expression     go to state 6
+    unary_expression       go to state 7
+    assignment_expression  go to state 8
+    assignment_statement   go to state 48
+    innerblock             go to state 79
+    decision               go to state 50
+
+
+State 71
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+   10           | expression . TK_MU_OP expression
+   11           | TK_LB expression . TK_RB
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_RB     shift, and go to state 56
+    TK_MI_OP  shift, and go to state 41
+
+
+State 72
+
+   28 conditional_expression: TK_NOT_OP TK_LB conditional_expression TK_RB .
+
+    $default  reduce using rule 28 (conditional_expression)
+
+
+State 73
+
+    8 expression: TK_LB TK_DI_OP expression TK_CMM . expression TK_RB
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 80
+
+
+State 74
+
+    9 expression: TK_LB TK_MO_OP expression TK_CMM . expression TK_RB
+
+    TK_ID     shift, and go to state 1
+    TK_CT     shift, and go to state 2
+    TK_LB     shift, and go to state 51
+    TK_MI_OP  shift, and go to state 4
+
+    primary_expression  go to state 6
+    unary_expression    go to state 17
+    expression          go to state 81
+
+
+State 75
+
+   31 assignments: assignment_statement assignments .
+
+    $default  reduce using rule 31 (assignments)
+
+
+State 76
+
+   34 mixed_statements: assignments mixed_statements .
+
+    $default  reduce using rule 34 (mixed_statements)
+
+
+State 77
+
+   38 innerblock: TK_LP mixed_statements TK_RP .
+
+    $default  reduce using rule 38 (innerblock)
+
+
+State 78
+
+   35 mixed_statements: decision mixed_statements .
+
+    $default  reduce using rule 35 (mixed_statements)
+
+
+State 79
+
+   40 decision: TK_IF conditional_expression innerblock TK_ELSE innerblock .
+
+    $default  reduce using rule 40 (decision)
+
+
+State 80
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+    8           | TK_LB TK_DI_OP expression TK_CMM expression . TK_RB
+   10           | expression . TK_MU_OP expression
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_RB     shift, and go to state 82
+    TK_MI_OP  shift, and go to state 41
+
+
+State 81
+
+    6 expression: expression . TK_PL_OP expression
+    7           | expression . TK_MI_OP expression
+    9           | TK_LB TK_MO_OP expression TK_CMM expression . TK_RB
+   10           | expression . TK_MU_OP expression
+
+    TK_MU_OP  shift, and go to state 32
+    TK_PL_OP  shift, and go to state 33
+    TK_RB     shift, and go to state 83
+    TK_MI_OP  shift, and go to state 41
+
+
+State 82
+
+    8 expression: TK_LB TK_DI_OP expression TK_CMM expression TK_RB .
+
+    $default  reduce using rule 8 (expression)
+
+
+State 83
+
+    9 expression: TK_LB TK_MO_OP expression TK_CMM expression TK_RB .
+
+    $default  reduce using rule 9 (expression)

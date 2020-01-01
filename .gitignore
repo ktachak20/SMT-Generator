@@ -1,0 +1,5 @@
+a.out
+*.tab.c
+*.yy.c
+in.*
+out.*
