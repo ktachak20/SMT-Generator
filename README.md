@@ -5,6 +5,8 @@ Currently the parser only handles the case of simple assignment statements and i
   - `smtlib.lex` :: Lexical analyzer containing specification for tokens.
   - `a.out` :: Program for converting input file to SMT code.
 ## Usage
-  ~./a.out inputfile outfile~
+First run ~./a.out inputfile~, on the input programs, this will generate ~inputfile.var~ (containing variable list) and ~inputfile.smt~ (smt program).
+Then after checking the variables, having two lines with the format ~smt-prog-name: interior variable list~.
+Run the ~vareqv~ on the file.
 ## Satisfiability and SMT model
   Add ~(check-sat)~ and ~(get-model)~ at the end of ~outfile~.
