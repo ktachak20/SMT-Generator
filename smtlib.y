@@ -273,7 +273,6 @@ int callSMTLIBparser( char *ifile, char *ofile )
 		return 0;
 	ofile_h = fopen( ofile, "w" );
   asprintf( &vfile, "%s.var", ifile );
-  printf("varfile: %s\n", vfile);
   vfile_h = fopen( vfile, "w" );
 	if(yyparse())
 	{	
@@ -305,10 +304,11 @@ int varcheck(char *var)
 int vardef()
 {
   int i=0;
-  while(i<varcount)
+  while(i<varcount-1)
   {
-      fprintf(ofile_h,"(declare-fun %s () Int)\n",varlist[i]);
+      fprintf(vfile_h,"%s ",varlist[i]);
       i++;
   }
+  fprintf(vfile_h, "%s", varlist[i]);
   return 1;
 }
