@@ -1,6 +1,7 @@
 /* smtlib Parser */
 /* Objectives:
-    1. generate file containing variables declared.
+    1. generate file containing variables declared. (DONE)
+    2. generate two files, infile.smt and infile.var, from a single source file. (DONE)
 */
 
 %{
@@ -265,12 +266,13 @@ void yyerror (char const *s) {
 }
 
 
-int callSMTLIBparser( char *ifile, char *ofile )
+int callSMTLIBparser( char *ifile )
 {	
-  char *vfile;
+  char *vfile, *ofile;
 	yyin = fopen( ifile ,"r");
 	if(yyin==NULL)
 		return 0;
+  asprintf( &ofile, "%s.smt", ifile );
 	ofile_h = fopen( ofile, "w" );
   asprintf( &vfile, "%s.var", ifile );
   vfile_h = fopen( vfile, "w" );
@@ -281,6 +283,7 @@ int callSMTLIBparser( char *ifile, char *ofile )
 	}
 	fclose(yyin);
 	fclose(ofile_h);
+  free( ofile );
   free( vfile );
   return 0;
 }
