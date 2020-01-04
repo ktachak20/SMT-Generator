@@ -1,4 +1,7 @@
 /* smtlib Parser */
+/* Objectives:
+    1. generate file containing variables declared.
+*/
 
 %{
 #include <stdio.h>
@@ -8,6 +11,7 @@
 #define YYDEBUG 1
 
 FILE        *ofile_h;
+FILE        *vfile_h;
 char        *x;
 extern int  yyparse();
 extern FILE *yyin;
@@ -263,10 +267,14 @@ void yyerror (char const *s) {
 
 int callSMTLIBparser( char *ifile, char *ofile )
 {	
+  char *vfile;
 	yyin = fopen( ifile ,"r");
 	if(yyin==NULL)
 		return 0;
 	ofile_h = fopen( ofile, "w" );
+  asprintf( &vfile, "%s.var", ifile );
+  printf("varfile: %s\n", vfile);
+  vfile_h = fopen( vfile, "w" );
 	if(yyparse())
 	{	
 		printf("Error\n");
@@ -274,6 +282,7 @@ int callSMTLIBparser( char *ifile, char *ofile )
 	}
 	fclose(yyin);
 	fclose(ofile_h);
+  free( vfile );
   return 0;
 }
 

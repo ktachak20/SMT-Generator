@@ -1,4 +1,5 @@
 a.out
-*.tab.c
-*.yy.c
+*.tab.*
+*.yy.*
 *.txt
+*.var
