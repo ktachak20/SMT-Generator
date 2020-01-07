@@ -11,38 +11,41 @@ L     [a-zA-Z_]
 
 %%
 
-"if"          { yylval.string=strdup(yytext); return(TK_IF); }
-"else"        { yylval.string=strdup(yytext); return(TK_ELSE); }
+"if"          { yylval.string = strdup(yytext); return(TK_IF); }
+"else"        { yylval.string = strdup(yytext); return(TK_ELSE); }
 
-{L}({L}|{D})* { yylval.string=strdup(yytext); return(TK_ID); }
-{D}+          { yylval.string=strdup(yytext); return(TK_CT); }
+{L}({L}|{D})* { yylval.string = strdup(yytext); return(TK_ID); }
+{D}+          { yylval.string = strdup(yytext); return(TK_CT); }
 
-","           { yylval.string=strdup(yytext); return(TK_CMM); }
-"=>"          { yylval.string=strdup(yytext); return(TK_IMP_OP); }
-"<="          { yylval.string=strdup(yytext); return(TK_LE_OP); }
-">="          { yylval.string=strdup(yytext); return(TK_GE_OP); }
-"=="          { yylval.string=strdup(yytext); return(TK_EQ_OP); }
-"!="          { yylval.string=strdup(yytext); return(TK_NE_OP); }
-"<"           { yylval.string=strdup(yytext); return(TK_LT_OP); }
-">"           { yylval.string=strdup(yytext); return(TK_GT_OP); }
+","           { yylval.string = strdup(yytext); return(TK_CMM); }
+"=>"          { yylval.string = strdup(yytext); return(TK_IMP_OP); }
+"<="          { yylval.string = strdup(yytext); return(TK_LE_OP); }
+">="          { yylval.string = strdup(yytext); return(TK_GE_OP); }
+"=="          { yylval.string = strdup(yytext); return(TK_EQ_OP); }
+"!="          { yylval.string = strdup(yytext); return(TK_NE_OP); }
+"<"           { yylval.string = strdup(yytext); return(TK_LT_OP); }
+">"           { yylval.string = strdup(yytext); return(TK_GT_OP); }
 
-"="           { yylval.string=strdup(yytext); return(TK_ASS_OP); }
+"="           { yylval.string = strdup(yytext); return(TK_ASS_OP); }
 
-"("           { yylval.string=strdup(yytext); return(TK_LB); }
-")"           { yylval.string=strdup(yytext); return(TK_RB); }
-"{"           { yylval.string=strdup(yytext); return(TK_LP); }
-"}"           { yylval.string=strdup(yytext); return(TK_RP); }
-";"           { yylval.string=strdup(yytext); return(TK_ST_END); }
+"("           { yylval.string = strdup(yytext); return(TK_LB); }
+")"           { yylval.string = strdup(yytext); return(TK_RB); }
+"{"           { yylval.string = strdup(yytext); return(TK_LP); }
+"}"           { yylval.string = strdup(yytext); return(TK_RP); }
+";"           { yylval.string = strdup(yytext); return(TK_ST_END); }
 
-"-"           { yylval.string=strdup(yytext); return(TK_MI_OP); }
-"+"           { yylval.string=strdup(yytext); return(TK_PL_OP); }
-"*"           { yylval.string=strdup(yytext); return(TK_MU_OP); }
-"/"           { yylval.string=strdup(yytext); return(TK_DI_OP); }
-"%"           { yylval.string=strdup(yytext); return(TK_MO_OP); }
+"-"           { yylval.string = strdup(yytext); return(TK_MI_OP); }
+"+"           { yylval.string = strdup(yytext); return(TK_PL_OP); }
+"*"           { yylval.string = strdup(yytext); return(TK_MU_OP); }
+"/"           { yylval.string = strdup(yytext); return(TK_DI_OP); }
+"%"           { yylval.string = strdup(yytext); return(TK_MO_OP); }
 
-"&&"          { yylval.string=strdup(yytext); return(TK_AND_OP); }
-"||"          { yylval.string=strdup(yytext); return(TK_OR_OP); }
-"!"           { yylval.string=strdup(yytext); return(TK_NOT_OP); }
+"<<"          { yylval.string = strdup(yytext); return(TK_LSHT_OP); }
+">>"          { yylval.string = strdup(yytext); return(TK_RSHT_OP); }
+
+"&&"          { yylval.string = strdup(yytext); return(TK_AND_OP); }
+"||"          { yylval.string = strdup(yytext); return(TK_OR_OP); }
+"!"           { yylval.string = strdup(yytext); return(TK_NOT_OP); }
 [ \t\v\n\f]		{ }
 .			        { /* ignore bad characters */ }
 

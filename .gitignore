@@ -5,3 +5,4 @@ a.out
 *.var
 *.smt
 *.out
+*.output
