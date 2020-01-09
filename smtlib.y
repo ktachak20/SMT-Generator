@@ -18,7 +18,7 @@ extern int  yyparse();
 extern FILE *yyin;
 int         varcount = 0;
 char        *varlist[MAXVARS];
-int         vardef( int );
+int         vardef( void );
 int         varcheck( char * );
 %}
 
@@ -51,14 +51,10 @@ int         varcheck( char * );
 %type <string> TK_EQ_OP 
 %type <string> TK_NE_OP 
 %type <string> TK_ASS_OP
-%type <string> TK_RSHT_OP
-%type <string> TK_LSHT_OP
 
 %token TK_MU_OP
 %token TK_PL_OP 
 %token TK_UMI
-%token TK_LSHT_OP
-%token TK_RSHT_OP
 %token TK_LT_OP 
 %token TK_NOT_OP
 %token TK_AND_OP
@@ -99,8 +95,6 @@ int         varcheck( char * );
 %left  TK_LT_OP
 %left  TK_MI_OP
 %left  TK_PL_OP
-%left  TK_RSHT_OP
-%left  TK_LSHT_OP
 %left  TK_MO_OP
 %left  TK_DI_OP
 %left  TK_MU_OP
@@ -125,21 +119,6 @@ unary_expression
 
 expression
   : unary_expression              { $$ = $1; }
-  | expression TK_MU_OP expression
-    { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(* ", $1," ", $3,")" );
-      $$=x;
-    }
-  | expression TK_DI_OP expression
-    { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(div ", $1," ", $3,")" );
-      $$=x;
-    }
-  | expression TK_MO_OP expression
-    { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", $1," ", $3,")" );
-      $$=x;
-    }
   | expression TK_PL_OP expression
     { 
       int size = asprintf(&x, "%s%s%s%s%s", "(+ ", $1," ", $3,")" );
@@ -150,14 +129,19 @@ expression
       int size = asprintf(&x, "%s%s%s%s%s", "(- ", $1," ", $3,")" );
       $$=x;
     }
-  | expression TK_LSHT_OP expression
+  | TK_LB TK_DI_OP expression TK_CMM expression TK_RB
     { 
-      int size = asprintf(&x, "(bv2int (bvshl ((_ int2bv 32) %s) ((_ int2bv 32) %s)))", $1, $3 );
+      int size = asprintf(&x, "%s%s%s%s%s", "(div ", $3," ", $5,")" );
       $$=x;
     }
-  | expression TK_RSHT_OP expression
+  | TK_LB TK_MO_OP expression TK_CMM expression TK_RB
     { 
-      int size = asprintf(&x, "(bv2int (bvlshr ((_ int2bv 32) %s) ((_ int2bv 32) %s)))", $1, $3 );
+      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", $3," ", $5,")" );
+      $$=x;
+    }
+  | expression TK_MU_OP expression
+    { 
+      int size = asprintf(&x, "%s%s%s%s%s", "(* ", $1," ", $3,")" );
       $$=x;
     }
   | TK_LB expression TK_RB {$$=$2;};
@@ -270,7 +254,7 @@ assertions: assignment_statement { asprintf( &x, "(assert %s)", $1 ); $$ = x; }
             { asprintf( &x, "(assert %s)\n%s", $1, $2 ); $$ = x; }
           ;
 smtlib:
-        assertions { vardef(1); asprintf( &x, "%s\n", $1 ); fprintf( ofile_h, "%s", x ); }
+        assertions { vardef(); asprintf( &x, "%s\n", $1 ); fprintf( ofile_h, "%s", x ); }
       ;
 /* ktachak 191219 */
 
@@ -320,7 +304,7 @@ int varcheck(char *var)
   return 1;
 }
 
-int vardef(int dcl_vars)
+int vardef()
 {
   int i=0;
   while(i<varcount-1)
@@ -329,14 +313,5 @@ int vardef(int dcl_vars)
       i++;
   }
   fprintf(vfile_h, "%s", varlist[i]);
-  if( dcl_vars )
-  {
-    i = 0;
-    while( i < varcount )
-    {
-      fprintf( ofile_h, "(declare-const %s Int)\n", varlist[i] );
-      i++;
-    }
-  }
   return 1;
 }
