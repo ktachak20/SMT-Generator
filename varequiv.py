@@ -101,18 +101,7 @@ def append_files(fname, fnamelist, headstr):
         ofile.write(infile.read())
         ofile.write('\n')
 
-if __name__ == '__main__':
-  description = "Generate SMT program for checking equivalence of variables."
-  argflags    = ['-s', '-r', '-v', '-o']
-  extflags    = ['--cfile', '--hlsfile', '--vfile', '--outfile']
-  required    = [True, True, True, True]
-  dest        = ['csmt', 'hsmt', 'vfile', 'out']
-  help        = ['SMT program of the C source.',
-                 'SMT of the HLS source.',
-                 'File containing the list of variables.',
-                 'File where the output will be written']
-
-  argspecs    = [argflags, extflags, required, dest, help]
+def main(argspecs):
   args = (mk_parser(description, *argspecs)).parse_args()
   (cvars_input, cvars_intr,
    hvars_input, hvars_intr) = get_vars(args.vfile)
@@ -124,14 +113,17 @@ if __name__ == '__main__':
 
   write_str_list(args.out, [declarations, mappings, assignments])
   append_files(args.out, [args.csmt, args.hsmt], 'Program')
-  #  f.write(assignments)
-  #  f.write('\n')
-  #  f.write(mappings)
-  #  f.write('\n')
-  #  with open(args.csmt, 'r') as cfile:
-  #    f.write(';; Program 1\n')
-  #    f.write(cfile.read())
-  #  ofile.write('\n')
-  #  with open(args.hsmt, 'r') as hfile:
-  #    f.write(';; Program 2\n')
-  #    f.write(hfile.read())
+
+
+if __name__ == '__main__':
+  description = "Generate SMT program for checking equivalence of variables."
+  argflags    = ['-s', '-r', '-v', '-o']
+  extflags    = ['--cfile', '--hlsfile', '--vfile', '--outfile']
+  required    = [True, True, True, True]
+  dest        = ['csmt', 'hsmt', 'vfile', 'out']
+  help        = ['SMT program of the C source.',
+                 'SMT of the HLS source.',
+                 'File containing the list of variables.',
+                 'File where the output will be written']
+  argspecs    = [argflags, extflags, required, dest, help]
+  main(argspecs)
