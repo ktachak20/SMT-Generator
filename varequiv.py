@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+
 from __future__ import print_function
 
 import sys
@@ -81,7 +83,7 @@ def get_vars(vfile):
   
 def mk_parser(desc, flags, extflags, required, dest, help):
   parser = argparse.ArgumentParser(description=desc)
-  for flg, extflg, rq, dst, hlp in zip(flags, extflags, required, dest, required):
+  for flg, extflg, rq, dst, hlp in zip(flags, extflags, required, dest, help):
     parser.add_argument(flg, extflg, dest=dst, required=rq, help=hlp)
   return parser
 
