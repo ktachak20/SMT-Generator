@@ -14,46 +14,54 @@
 FILE        *ofile_h;
 FILE        *vfile_h;
 char        *x;
+char        *vdec;              /* pointer to string of variable declarations. */
 extern int  yyparse();
 extern FILE *yyin;
 int         varcount = 0;
 char        *varlist[MAXVARS];
 int         vardef( void );
 int         varcheck( char * );
+
+typedef struct 
+{
+  char* string;
+  int   type;
+} DATA_expr;
 %}
 
 %union{
-  char* string;
+  int       term;
+  DATA_expr nonterm;
 }
 
-%type <string> primary_expression
-%type <string> relational_operator
-%type <string> primary_conditional_expression
-%type <string> conditional_expression
-%type <string> unary_expression
-%type <string> expression
-%type <string> assignment_expression
-%type <string> assignments
-%type <string> assignment_statement
-%type <string> innerblock
-%type <string> decision
-%type <string> assertions
-%type <string> mixed_statements
-%type <string> postfix_expression
-%type <string> TK_ID
-%type <string> TK_IF
-%type <string> TK_ELSE
-%type <string> TK_CMM
-%type <string> TK_CT
-%type <string> TK_LT_OP
-%type <string> TK_GT_OP
-%type <string> TK_LE_OP 
-%type <string> TK_GE_OP 
-%type <string> TK_EQ_OP 
-%type <string> TK_NE_OP 
-%type <string> TK_ASS_OP
-%type <string> TK_LSQB
-%type <string> TK_RSQB
+%type <nonterm> primary_expression
+%type <nonterm> relational_operator
+%type <nonterm> primary_conditional_expression
+%type <nonterm> conditional_expression
+%type <nonterm> unary_expression
+%type <nonterm> expression
+%type <nonterm> assignment_expression
+%type <nonterm> assignments
+%type <nonterm> assignment_statement
+%type <nonterm> innerblock
+%type <nonterm> decision
+%type <nonterm> assertions
+%type <nonterm> mixed_statements
+%type <nonterm> postfix_expression
+%type <term> TK_ID
+%type <term> TK_IF
+%type <term> TK_ELSE
+%type <term> TK_CMM
+%type <term> TK_CT
+%type <term> TK_LT_OP
+%type <term> TK_GT_OP
+%type <term> TK_LE_OP 
+%type <term> TK_GE_OP 
+%type <term> TK_EQ_OP 
+%type <term> TK_NE_OP 
+%type <term> TK_ASS_OP
+%type <term> TK_LSQB
+%type <term> TK_RSQB
 
 %token TK_MU_OP
 %token TK_PL_OP 
@@ -111,7 +119,8 @@ int         varcheck( char * );
 %%
 
 primary_expression
-  :TK_ID {varcheck($1);strcpy($$,$1); } 
+  : TK_ID /* {varcheck($1);strcpy($$,$1); } */
+    { /* TODO */ }
   | TK_CT           {strcpy($$,$1); } 
 ;
 

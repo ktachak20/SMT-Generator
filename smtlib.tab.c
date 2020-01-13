@@ -73,6 +73,7 @@
 FILE        *ofile_h;
 FILE        *vfile_h;
 char        *x;
+char        *vdec;              /* pointer to string of variable declarations. */
 extern int  yyparse();
 extern FILE *yyin;
 int         varcount = 0;
@@ -80,7 +81,13 @@ char        *varlist[MAXVARS];
 int         vardef( void );
 int         varcheck( char * );
 
-#line 84 "smtlib.tab.c" /* yacc.c:339  */
+typedef struct 
+{
+  char* string;
+  int   type;
+} DATA_expr;
+
+#line 91 "smtlib.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -152,11 +159,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "smtlib.y" /* yacc.c:355  */
+#line 32 "smtlib.y" /* yacc.c:355  */
 
-  char* string;
+  int       term;
+  DATA_expr nonterm;
 
-#line 160 "smtlib.tab.c" /* yacc.c:355  */
+#line 168 "smtlib.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -173,7 +181,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 177 "smtlib.tab.c" /* yacc.c:358  */
+#line 185 "smtlib.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -473,11 +481,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   114,   114,   115,   119,   121,   126,   128,   135,   136,
-     141,   146,   151,   156,   161,   165,   170,   173,   174,   175,
-     176,   177,   178,   179,   183,   194,   195,   200,   205,   210,
-     216,   218,   241,   243,   244,   247,   248,   249,   251,   254,
-     255,   256,   258,   260,   263,   264,   265,   267,   271
+       0,   122,   122,   124,   128,   130,   135,   137,   144,   145,
+     150,   155,   160,   165,   170,   174,   179,   182,   183,   184,
+     185,   186,   187,   188,   192,   203,   204,   209,   214,   219,
+     225,   227,   250,   252,   253,   256,   257,   258,   260,   263,
+     264,   265,   267,   269,   272,   273,   274,   276,   280
 };
 #endif
 
@@ -1328,334 +1336,334 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 114 "smtlib.y" /* yacc.c:1646  */
-    {varcheck((yyvsp[0].string));strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1334 "smtlib.tab.c" /* yacc.c:1646  */
+#line 123 "smtlib.y" /* yacc.c:1646  */
+    { /* TODO */ }
+#line 1342 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 115 "smtlib.y" /* yacc.c:1646  */
-    {strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1340 "smtlib.tab.c" /* yacc.c:1646  */
+#line 124 "smtlib.y" /* yacc.c:1646  */
+    {strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1348 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 120 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1346 "smtlib.tab.c" /* yacc.c:1646  */
+#line 129 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1354 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 122 "smtlib.y" /* yacc.c:1646  */
-    { asprintf(&x, "(select %s %s)", (yyvsp[-3].string), (yyvsp[-1].string)); (yyval.string) = x; }
-#line 1352 "smtlib.tab.c" /* yacc.c:1646  */
+#line 131 "smtlib.y" /* yacc.c:1646  */
+    { asprintf(&x, "(select %s %s)", (yyvsp[-3].nonterm), (yyvsp[-1].nonterm)); (yyval.nonterm) = x; }
+#line 1360 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 127 "smtlib.y" /* yacc.c:1646  */
+#line 136 "smtlib.y" /* yacc.c:1646  */
     { /* TODO */ }
-#line 1358 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1366 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 128 "smtlib.y" /* yacc.c:1646  */
+#line 137 "smtlib.y" /* yacc.c:1646  */
     {
         char *x;
-        int size = asprintf(&x, "%s%s%s", "(- ",(yyvsp[0].string),")" );
-        (yyval.string)=x;
+        int size = asprintf(&x, "%s%s%s", "(- ",(yyvsp[0].nonterm),")" );
+        (yyval.nonterm)=x;
     }
-#line 1368 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1376 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 135 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1374 "smtlib.tab.c" /* yacc.c:1646  */
+#line 144 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1382 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 137 "smtlib.y" /* yacc.c:1646  */
+#line 146 "smtlib.y" /* yacc.c:1646  */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(+ ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(+ ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1383 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1391 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 142 "smtlib.y" /* yacc.c:1646  */
+#line 151 "smtlib.y" /* yacc.c:1646  */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(- ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(- ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1392 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1400 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 147 "smtlib.y" /* yacc.c:1646  */
+#line 156 "smtlib.y" /* yacc.c:1646  */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(div ", (yyvsp[-3].string)," ", (yyvsp[-1].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(div ", (yyvsp[-3].nonterm)," ", (yyvsp[-1].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1401 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1409 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 152 "smtlib.y" /* yacc.c:1646  */
+#line 161 "smtlib.y" /* yacc.c:1646  */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", (yyvsp[-3].string)," ", (yyvsp[-1].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", (yyvsp[-3].nonterm)," ", (yyvsp[-1].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1410 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1418 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 157 "smtlib.y" /* yacc.c:1646  */
+#line 166 "smtlib.y" /* yacc.c:1646  */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(* ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(* ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1419 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1427 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 161 "smtlib.y" /* yacc.c:1646  */
-    {(yyval.string)=(yyvsp[-1].string);}
-#line 1425 "smtlib.tab.c" /* yacc.c:1646  */
+#line 170 "smtlib.y" /* yacc.c:1646  */
+    {(yyval.nonterm)=(yyvsp[-1].nonterm);}
+#line 1433 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 165 "smtlib.y" /* yacc.c:1646  */
+#line 174 "smtlib.y" /* yacc.c:1646  */
     {  
       char *x;
-      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1435 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1443 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 170 "smtlib.y" /* yacc.c:1646  */
-    {(yyval.string)=(yyvsp[-1].string);}
-#line 1441 "smtlib.tab.c" /* yacc.c:1646  */
+#line 179 "smtlib.y" /* yacc.c:1646  */
+    {(yyval.nonterm)=(yyvsp[-1].nonterm);}
+#line 1449 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 173 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1447 "smtlib.tab.c" /* yacc.c:1646  */
+#line 182 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1455 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 174 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1453 "smtlib.tab.c" /* yacc.c:1646  */
+#line 183 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1461 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 175 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1459 "smtlib.tab.c" /* yacc.c:1646  */
+#line 184 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1467 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 176 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1465 "smtlib.tab.c" /* yacc.c:1646  */
+#line 185 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1473 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 177 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),"="); }
-#line 1471 "smtlib.tab.c" /* yacc.c:1646  */
+#line 186 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),"="); }
+#line 1479 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 178 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1477 "smtlib.tab.c" /* yacc.c:1646  */
+#line 187 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1485 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 179 "smtlib.y" /* yacc.c:1646  */
-    { strcpy((yyval.string),(yyvsp[0].string)); }
-#line 1483 "smtlib.tab.c" /* yacc.c:1646  */
+#line 188 "smtlib.y" /* yacc.c:1646  */
+    { strcpy((yyval.nonterm),(yyvsp[0].term)); }
+#line 1491 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 183 "smtlib.y" /* yacc.c:1646  */
+#line 192 "smtlib.y" /* yacc.c:1646  */
     {
       int size;
-      if(strcmp((yyvsp[-1].string),"!=")==0)
-      size = asprintf(&x, "%s%s%s%s%s%s", "(not (="," ",(yyvsp[-2].string)," ", (yyvsp[0].string),"))");
+      if(strcmp((yyvsp[-1].nonterm),"!=")==0)
+      size = asprintf(&x, "%s%s%s%s%s%s", "(not (="," ",(yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),"))");
       else
-      size = asprintf(&x, "%s%s%s%s%s%s%s", "(",(yyvsp[-1].string)," ",(yyvsp[-2].string)," ", (yyvsp[0].string),")");
-      (yyval.string)=x;
+      size = asprintf(&x, "%s%s%s%s%s%s%s", "(",(yyvsp[-1].nonterm)," ",(yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")");
+      (yyval.nonterm)=x;
     }
-#line 1496 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1504 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 194 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1502 "smtlib.tab.c" /* yacc.c:1646  */
+#line 203 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1510 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 196 "smtlib.y" /* yacc.c:1646  */
+#line 205 "smtlib.y" /* yacc.c:1646  */
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(and ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(and ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1511 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1519 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 201 "smtlib.y" /* yacc.c:1646  */
+#line 210 "smtlib.y" /* yacc.c:1646  */
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(=> ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(=> ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1520 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1528 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 206 "smtlib.y" /* yacc.c:1646  */
+#line 215 "smtlib.y" /* yacc.c:1646  */
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(or ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(or ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1529 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1537 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 211 "smtlib.y" /* yacc.c:1646  */
+#line 220 "smtlib.y" /* yacc.c:1646  */
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].string)," ", (yyvsp[0].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1538 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1546 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 216 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[-1].string); }
-#line 1544 "smtlib.tab.c" /* yacc.c:1646  */
+#line 225 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[-1].nonterm); }
+#line 1552 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 219 "smtlib.y" /* yacc.c:1646  */
+#line 228 "smtlib.y" /* yacc.c:1646  */
     {
-      int size = asprintf(&x, "%s%s%s", "(not ",(yyvsp[-1].string),")" );
-      (yyval.string)=x;
+      int size = asprintf(&x, "%s%s%s", "(not ",(yyvsp[-1].nonterm),")" );
+      (yyval.nonterm)=x;
     }
-#line 1553 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1561 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 241 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[-1].string); }
-#line 1559 "smtlib.tab.c" /* yacc.c:1646  */
+#line 250 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[-1].nonterm); }
+#line 1567 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 243 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1565 "smtlib.tab.c" /* yacc.c:1646  */
+#line 252 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1573 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 245 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(and %s %s)", (yyvsp[-1].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1571 "smtlib.tab.c" /* yacc.c:1646  */
+#line 254 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(and %s %s)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1579 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 247 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1577 "smtlib.tab.c" /* yacc.c:1646  */
+#line 256 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1585 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 248 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1583 "smtlib.tab.c" /* yacc.c:1646  */
+#line 257 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1591 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 250 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(and %s %s)", (yyvsp[-1].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1589 "smtlib.tab.c" /* yacc.c:1646  */
+#line 259 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(and %s %s)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1597 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 252 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(and %s %s)", (yyvsp[-1].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1595 "smtlib.tab.c" /* yacc.c:1646  */
+#line 261 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(and %s %s)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1603 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 254 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1601 "smtlib.tab.c" /* yacc.c:1646  */
+#line 263 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1609 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 255 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[0].string); }
-#line 1607 "smtlib.tab.c" /* yacc.c:1646  */
+#line 264 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[0].nonterm); }
+#line 1615 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 256 "smtlib.y" /* yacc.c:1646  */
-    { (yyval.string) = (yyvsp[-1].string); }
-#line 1613 "smtlib.tab.c" /* yacc.c:1646  */
+#line 265 "smtlib.y" /* yacc.c:1646  */
+    { (yyval.nonterm) = (yyvsp[-1].nonterm); }
+#line 1621 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 259 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(ite %s %s true)", (yyvsp[-1].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1619 "smtlib.tab.c" /* yacc.c:1646  */
+#line 268 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(ite %s %s true)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1627 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 261 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(ite %s %s %s)", (yyvsp[-3].string), (yyvsp[-2].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1625 "smtlib.tab.c" /* yacc.c:1646  */
+#line 270 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(ite %s %s %s)", (yyvsp[-3].nonterm), (yyvsp[-2].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1633 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 263 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(assert %s)", (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1631 "smtlib.tab.c" /* yacc.c:1646  */
+#line 272 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(assert %s)", (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1639 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 264 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(assert %s)", (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1637 "smtlib.tab.c" /* yacc.c:1646  */
+#line 273 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(assert %s)", (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1645 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 266 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1643 "smtlib.tab.c" /* yacc.c:1646  */
+#line 275 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1651 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 268 "smtlib.y" /* yacc.c:1646  */
-    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].string), (yyvsp[0].string) ); (yyval.string) = x; }
-#line 1649 "smtlib.tab.c" /* yacc.c:1646  */
+#line 277 "smtlib.y" /* yacc.c:1646  */
+    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
+#line 1657 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 271 "smtlib.y" /* yacc.c:1646  */
-    { vardef(); asprintf( &x, "%s\n", (yyvsp[0].string) ); fprintf( ofile_h, "%s", x ); }
-#line 1655 "smtlib.tab.c" /* yacc.c:1646  */
+#line 280 "smtlib.y" /* yacc.c:1646  */
+    { vardef(); asprintf( &x, "%s\n", (yyvsp[0].nonterm) ); fprintf( ofile_h, "%s", x ); }
+#line 1663 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1659 "smtlib.tab.c" /* yacc.c:1646  */
+#line 1667 "smtlib.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1883,7 +1891,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 275 "smtlib.y" /* yacc.c:1906  */
+#line 284 "smtlib.y" /* yacc.c:1906  */
 
 
 void yyerror (char const *s) {

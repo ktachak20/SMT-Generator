@@ -82,11 +82,12 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "smtlib.y" /* yacc.c:1909  */
+#line 32 "smtlib.y" /* yacc.c:1909  */
 
-  char* string;
+  int       term;
+  DATA_expr nonterm;
 
-#line 90 "smtlib.tab.h" /* yacc.c:1909  */
+#line 91 "smtlib.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
