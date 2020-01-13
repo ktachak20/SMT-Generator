@@ -17,6 +17,9 @@ L     [a-zA-Z_]
 {L}({L}|{D})* { yylval.string=strdup(yytext); return(TK_ID); }
 {D}+          { yylval.string=strdup(yytext); return(TK_CT); }
 
+"["           { yylval.string=strdup(yytext); return(TK_LSQB); }
+"]"           { yylval.string=strdup(yytext); return(TK_RSQB); }
+
 ","           { yylval.string=strdup(yytext); return(TK_CMM); }
 "=>"          { yylval.string=strdup(yytext); return(TK_IMP_OP); }
 "<="          { yylval.string=strdup(yytext); return(TK_LE_OP); }
