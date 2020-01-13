@@ -71,7 +71,9 @@ extern int yydebug;
     TK_MO_OP = 281,
     TK_IF = 282,
     TK_ELSE = 283,
-    TK_ST_END = 284
+    TK_ST_END = 284,
+    TK_LSQB = 285,
+    TK_RSQB = 286
   };
 #endif
 
@@ -84,7 +86,7 @@ union YYSTYPE
 
   char* string;
 
-#line 88 "smtlib.tab.h" /* yacc.c:1909  */
+#line 90 "smtlib.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

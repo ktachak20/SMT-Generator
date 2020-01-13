@@ -39,6 +39,7 @@ int         varcheck( char * );
 %type <string> decision
 %type <string> assertions
 %type <string> mixed_statements
+%type <string> postfix_expression
 %type <string> TK_ID
 %type <string> TK_IF
 %type <string> TK_ELSE
@@ -51,6 +52,8 @@ int         varcheck( char * );
 %type <string> TK_EQ_OP 
 %type <string> TK_NE_OP 
 %type <string> TK_ASS_OP
+%type <string> TK_LSQB
+%type <string> TK_RSQB
 
 %token TK_MU_OP
 %token TK_PL_OP 
@@ -79,6 +82,8 @@ int         varcheck( char * );
 %token TK_IF
 %token TK_ELSE
 %token TK_ST_END
+%token TK_LSQB
+%token TK_RSQB
 
 %start smtlib
 
@@ -109,8 +114,17 @@ primary_expression
   :TK_ID {varcheck($1);strcpy($$,$1); } 
   | TK_CT           {strcpy($$,$1); } 
 ;
-unary_expression
+
+postfix_expression
   : primary_expression
+    { $$ = $1; }
+  | postfix_expression TK_LSQB expression TK_RSQB
+    { /* TODO */ }
+  ;
+
+unary_expression
+  : postfix_expression
+    { /* TODO */ }
   | TK_MI_OP primary_expression %prec TK_UMI {
         char *x;
         int size = asprintf(&x, "%s%s%s", "(- ",$2,")" );
