@@ -1,0 +1,37 @@
+;; Variable declarations.
+(declare-const a Int)
+(declare-const b Int)
+(declare-const out Int)
+(declare-const k2 Int)
+(declare-const k1 Int)
+(declare-const a Int)
+(declare-const b Int)
+(declare-const out Int)
+(declare-const k2 Int)
+(declare-const k1 Int)
+(declare-const m_k2_k2 Int)
+(declare-const m_k2_k1 Int)
+(declare-const m_k1_k2 Int)
+(declare-const m_k1_k1 Int)
+
+;; Variable to register mapping.
+(assert (= (+ m_k2_k2 m_k2_k1) 1))
+(assert (= (+ m_k1_k2 m_k1_k1) 1))
+;; Register to variable mapping.
+(assert (= (+ m_k2_k2 m_k2_k1) 1))
+(assert (= (+ m_k1_k2 m_k1_k1) 1))
+;; Variable to values mapping.
+(assert (= k2 (+ (* m_k2_k2 k2) (* m_k2_k1 k1))))
+(assert (= k1 (+ (* m_k1_k2 k2) (* m_k1_k1 k1))))
+
+;; Variable to register assignments.
+(assert (= a a))
+(assert (= b b))
+(assert (= out out))
+
+;; Program 1
+(assert (ite (<= (- (+ 0 (* 1 a)) (* 1 b)) 0) (= out (+ (+ 0 (* 1 b)) (* 1 k2))) (ite (> (- (+ 0 (* 1 a)) (* 1 b)) 0) (= out (+ (+ 0 (* 1 a)) (* 1 k1))) (= 1 1))))
+
+;; Program 2
+(assert (ite (<= (- (+ 0 (* 1 a)) (* 1 b)) 0) (= out (+ (+ 0 (* 1 b)) (* 1 k2))) (ite (> (- (+ 0 (* 1 a)) (* 1 b)) 0) (= out (+ (+ 0 (* 1 a)) (* 1 k1))) (= 1 1))))
+
