@@ -1347,7 +1347,7 @@ yyreduce:
 
   case 5:
 #line 122 "smtlib.y" /* yacc.c:1646  */
-    { /* TODO */ }
+    { asprintf(&x, "(select %s %s)", (yyvsp[-3].string), (yyvsp[-1].string)); (yyval.string) = x; }
 #line 1352 "smtlib.tab.c" /* yacc.c:1646  */
     break;
 

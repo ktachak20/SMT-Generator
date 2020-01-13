@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 29
-#define YY_END_OF_BUFFER 30
+#define YY_NUM_RULES 31
+#define YY_END_OF_BUFFER 32
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -360,13 +360,13 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[42] =
+static const flex_int16_t yy_accept[44] =
     {   0,
-        0,    0,   30,   28,   27,   27,   26,   23,   28,   14,
-       15,   21,   20,    5,   19,   22,    4,   18,   11,   13,
-       12,    3,    3,    3,   16,   28,   17,   10,   24,    4,
-        7,    9,    6,    8,    3,    3,    1,   25,    3,    2,
-        0
+        0,    0,   32,   30,   29,   29,   28,   25,   30,   16,
+       17,   23,   22,    7,   21,   24,    4,   20,   13,   15,
+       14,    3,    5,    6,    3,    3,   18,   30,   19,   12,
+       26,    4,    9,   11,    8,   10,    3,    3,    1,   27,
+        3,    2,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -380,11 +380,11 @@ static const YY_CHAR yy_ec[256] =
        17,   18,    1,    1,   19,   19,   19,   19,   19,   19,
        19,   19,   19,   19,   19,   19,   19,   19,   19,   19,
        19,   19,   19,   19,   19,   19,   19,   19,   19,   19,
-        1,    1,    1,    1,   19,    1,   19,   19,   19,   19,
+       20,    1,   21,    1,   19,    1,   19,   19,   19,   19,
 
-       20,   21,   19,   19,   22,   19,   19,   23,   19,   19,
-       19,   19,   19,   19,   24,   19,   19,   19,   19,   19,
-       19,   19,   25,   26,   27,    1,    1,    1,    1,    1,
+       22,   23,   19,   19,   24,   19,   19,   25,   19,   19,
+       19,   19,   19,   19,   26,   19,   19,   19,   19,   19,
+       19,   19,   27,   28,   29,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -401,51 +401,53 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[28] =
+static const YY_CHAR yy_meta[30] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    2,    1,    1,    1,    1,    2,    2,
-        2,    2,    2,    2,    1,    1,    1
+        1,    1,    1,    2,    1,    1,    1,    1,    2,    1,
+        1,    2,    2,    2,    2,    2,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[43] =
+static const flex_int16_t yy_base[45] =
     {   0,
-        0,    0,   42,   43,   43,   43,   24,   43,   34,   43,
-       43,   43,   43,   43,   43,   43,   25,   43,   21,   11,
-       20,    0,   13,   14,   43,    8,   43,   43,   43,   19,
-       43,   43,   43,   43,    0,    8,    0,   43,   11,    0,
-       43,   28
+        0,    0,   44,   45,   45,   45,   26,   45,   36,   45,
+       45,   45,   45,   45,   45,   45,   27,   45,   23,   13,
+       22,    0,   45,   45,   13,   14,   45,    8,   45,   45,
+       45,   21,   45,   45,   45,   45,    0,    8,    0,   45,
+       11,    0,   45,   30
     } ;
 
-static const flex_int16_t yy_def[43] =
+static const flex_int16_t yy_def[45] =
     {   0,
-       41,    1,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   42,   42,   42,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   42,   42,   42,   41,   42,   42,
-        0,   41
+       43,    1,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,   44,   43,   43,   44,   44,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,   43,   44,   44,   44,   43,
+       44,   44,    0,   43
     } ;
 
-static const flex_int16_t yy_nxt[71] =
+static const flex_int16_t yy_nxt[75] =
     {   0,
         4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
        14,   15,   16,   17,   18,   19,   20,   21,   22,   23,
-       22,   24,   22,   22,   25,   26,   27,   32,   33,   35,
-       40,   39,   30,   38,   37,   36,   34,   31,   30,   29,
-       28,   41,    3,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41
+       24,   25,   22,   26,   22,   22,   27,   28,   29,   34,
+       35,   37,   42,   41,   32,   40,   39,   38,   36,   33,
+       32,   31,   30,   43,    3,   43,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,   43,   43,   43
     } ;
 
-static const flex_int16_t yy_chk[71] =
+static const flex_int16_t yy_chk[75] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,   20,   20,   42,
-       39,   36,   30,   26,   24,   23,   21,   19,   17,    9,
-        7,    3,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41
+        1,    1,    1,    1,    1,    1,    1,    1,    1,   20,
+       20,   44,   41,   38,   32,   28,   26,   25,   21,   19,
+       17,    9,    7,    3,   43,   43,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
+       43,   43,   43,   43
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -470,8 +472,8 @@ copy the old string to the new string and return the new address.
 #line 8 "smtlib.lex"
 #include <stdio.h>
 #include "smtlib.tab.h" /* need to include while using yacc*/
-#line 474 "lex.yy.c"
-#line 475 "lex.yy.c"
+#line 476 "lex.yy.c"
+#line 477 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -691,7 +693,7 @@ YY_DECL
 #line 12 "smtlib.lex"
 
 
-#line 695 "lex.yy.c"
+#line 697 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -718,13 +720,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 42 )
+				if ( yy_current_state >= 44 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 43 );
+		while ( yy_base[yy_current_state] != 45 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -771,130 +773,140 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 20 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_CMM); }
+{ yylval.string=strdup(yytext); return(TK_LSQB); }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 21 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_IMP_OP); }
+{ yylval.string=strdup(yytext); return(TK_RSQB); }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 22 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_LE_OP); }
+#line 23 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_CMM); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 23 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_GE_OP); }
+#line 24 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_IMP_OP); }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 24 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_EQ_OP); }
+#line 25 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_LE_OP); }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 25 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_NE_OP); }
+#line 26 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_GE_OP); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 26 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_LT_OP); }
+#line 27 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_EQ_OP); }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 27 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_GT_OP); }
+#line 28 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_NE_OP); }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
 #line 29 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_ASS_OP); }
+{ yylval.string=strdup(yytext); return(TK_LT_OP); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 31 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_LB); }
+#line 30 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_GT_OP); }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
 #line 32 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_RB); }
+{ yylval.string=strdup(yytext); return(TK_ASS_OP); }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 33 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_LP); }
+#line 34 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_LB); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 34 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_RP); }
+#line 35 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_RB); }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 35 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_ST_END); }
+#line 36 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_LP); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
 #line 37 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_MI_OP); }
+{ yylval.string=strdup(yytext); return(TK_RP); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
 #line 38 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_PL_OP); }
+{ yylval.string=strdup(yytext); return(TK_ST_END); }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 39 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_MU_OP); }
+#line 40 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_MI_OP); }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 40 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_DI_OP); }
+#line 41 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_PL_OP); }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 41 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_MO_OP); }
+#line 42 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_MU_OP); }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
 #line 43 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_AND_OP); }
+{ yylval.string=strdup(yytext); return(TK_DI_OP); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 44 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_OR_OP); }
+{ yylval.string=strdup(yytext); return(TK_MO_OP); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 45 "smtlib.lex"
-{ yylval.string=strdup(yytext); return(TK_NOT_OP); }
+#line 46 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_AND_OP); }
 	YY_BREAK
 case 27:
-/* rule 27 can match eol */
 YY_RULE_SETUP
-#line 46 "smtlib.lex"
-{ }
+#line 47 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_OR_OP); }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 47 "smtlib.lex"
-{ /* ignore bad characters */ }
+#line 48 "smtlib.lex"
+{ yylval.string=strdup(yytext); return(TK_NOT_OP); }
 	YY_BREAK
 case 29:
+/* rule 29 can match eol */
 YY_RULE_SETUP
 #line 49 "smtlib.lex"
+{ }
+	YY_BREAK
+case 30:
+YY_RULE_SETUP
+#line 50 "smtlib.lex"
+{ /* ignore bad characters */ }
+	YY_BREAK
+case 31:
+YY_RULE_SETUP
+#line 52 "smtlib.lex"
 ECHO;
 	YY_BREAK
-#line 898 "lex.yy.c"
+#line 910 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1191,7 +1203,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 42 )
+			if ( yy_current_state >= 44 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1219,11 +1231,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 42 )
+		if ( yy_current_state >= 44 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 41);
+	yy_is_jam = (yy_current_state == 43);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1899,7 +1911,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 49 "smtlib.lex"
+#line 52 "smtlib.lex"
 
 
 int yywrap()

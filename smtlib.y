@@ -119,7 +119,7 @@ postfix_expression
   : primary_expression
     { $$ = $1; }
   | postfix_expression TK_LSQB expression TK_RSQB
-    { /* TODO */ }
+    { asprintf(&x, "(select %s %s)", $1, $3); $$ = x; }
   ;
 
 unary_expression
