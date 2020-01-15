@@ -135,34 +135,34 @@ extern int yydebug;
   enum yytokentype
   {
     TK_MU_OP = 258,
-    TK_PL_OP = 259,
-    TK_UMI = 260,
-    TK_LT_OP = 261,
-    TK_NOT_OP = 262,
-    TK_AND_OP = 263,
-    TK_OR_OP = 264,
+    TK_DI_OP = 259,
+    TK_MO_OP = 260,
+    TK_NOT_OP = 261,
+    TK_AND_OP = 262,
+    TK_OR_OP = 263,
+    TK_LT_OP = 264,
     TK_IMP_OP = 265,
-    TK_ID = 266,
-    TK_CT = 267,
-    TK_CMM = 268,
-    TK_LB = 269,
-    TK_LP = 270,
-    TK_RB = 271,
-    TK_RP = 272,
-    TK_GT_OP = 273,
-    TK_LE_OP = 274,
-    TK_GE_OP = 275,
-    TK_EQ_OP = 276,
-    TK_NE_OP = 277,
-    TK_ASS_OP = 278,
-    TK_MI_OP = 279,
-    TK_DI_OP = 280,
-    TK_MO_OP = 281,
-    TK_IF = 282,
-    TK_ELSE = 283,
-    TK_ST_END = 284,
-    TK_LSQB = 285,
-    TK_RSQB = 286
+    TK_GT_OP = 266,
+    TK_ID = 267,
+    TK_CT = 268,
+    TK_CMM = 269,
+    TK_LB = 270,
+    TK_LP = 271,
+    TK_RB = 272,
+    TK_LE_OP = 273,
+    TK_GE_OP = 274,
+    TK_EQ_OP = 275,
+    TK_IF = 276,
+    TK_ELSE = 277,
+    TK_ST_END = 278,
+    TK_LSQB = 279,
+    TK_RSQB = 280,
+    TK_RP = 281,
+    TK_PL_OP = 282,
+    TK_MI_OP = 283,
+    TK_NE_OP = 284,
+    TK_ASS_OP = 285,
+    TK_UMI = 286
   };
 #endif
 
@@ -172,9 +172,9 @@ union YYSTYPE
 {
 #line 34 "smtlib.y"
 
-  char        *literal;
-  char        *identifier;
-  DATA_expr_t *nonterm;
+  char        *TK_literal_t;
+  char        *TK_identifier_t;
+  DATA_expr_t *NT_exp_t;
 
 #line 180 "smtlib.tab.c"
 
@@ -426,7 +426,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  27
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   204
+#define YYLAST   202
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  32
@@ -484,11 +484,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   125,   125,   134,   139,   141,   152,   154,   162,   163,
-     168,   173,   178,   183,   188,   192,   197,   200,   201,   202,
-     203,   204,   205,   206,   210,   221,   222,   227,   232,   237,
-     243,   245,   268,   270,   271,   274,   275,   276,   278,   281,
-     282,   283,   285,   287,   290,   291,   292,   294,   298
+       0,   107,   107,   116,   121,   123,   134,   136,   144,   145,
+     150,   155,   160,   165,   170,   174,   179,   182,   183,   184,
+     185,   186,   187,   188,   192,   203,   204,   209,   214,   219,
+     225,   227,   250,   252,   253,   256,   257,   258,   260,   263,
+     264,   265,   267,   269,   272,   273,   274,   276,   280
 };
 #endif
 
@@ -497,16 +497,17 @@ static const yytype_uint16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "TK_MU_OP", "TK_PL_OP", "TK_UMI",
-  "TK_LT_OP", "TK_NOT_OP", "TK_AND_OP", "TK_OR_OP", "TK_IMP_OP", "TK_ID",
-  "TK_CT", "TK_CMM", "TK_LB", "TK_LP", "TK_RB", "TK_RP", "TK_GT_OP",
-  "TK_LE_OP", "TK_GE_OP", "TK_EQ_OP", "TK_NE_OP", "TK_ASS_OP", "TK_MI_OP",
-  "TK_DI_OP", "TK_MO_OP", "TK_IF", "TK_ELSE", "TK_ST_END", "TK_LSQB",
-  "TK_RSQB", "$accept", "primary_expression", "postfix_expression",
-  "unary_expression", "expression", "assignment_expression",
-  "relational_operator", "primary_conditional_expression",
-  "conditional_expression", "assignment_statement", "assignments",
-  "mixed_statements", "innerblock", "decision", "assertions", "smtlib", YY_NULLPTR
+  "$end", "error", "$undefined", "TK_MU_OP", "TK_DI_OP", "TK_MO_OP",
+  "TK_NOT_OP", "TK_AND_OP", "TK_OR_OP", "TK_LT_OP", "TK_IMP_OP",
+  "TK_GT_OP", "TK_ID", "TK_CT", "TK_CMM", "TK_LB", "TK_LP", "TK_RB",
+  "TK_LE_OP", "TK_GE_OP", "TK_EQ_OP", "TK_IF", "TK_ELSE", "TK_ST_END",
+  "TK_LSQB", "TK_RSQB", "TK_RP", "TK_PL_OP", "TK_MI_OP", "TK_NE_OP",
+  "TK_ASS_OP", "TK_UMI", "$accept", "primary_expression",
+  "postfix_expression", "unary_expression", "expression",
+  "assignment_expression", "relational_operator",
+  "primary_conditional_expression", "conditional_expression",
+  "assignment_statement", "assignments", "mixed_statements", "innerblock",
+  "decision", "assertions", "smtlib", YY_NULLPTR
 };
 #endif
 
@@ -522,10 +523,10 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -50
+#define YYPACT_NINF -35
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-50)))
+  (!!((Yystate) == (-35)))
 
 #define YYTABLE_NINF -1
 
@@ -536,15 +537,15 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     142,   -50,   -50,   171,    32,   126,   -50,   -25,    -7,    -3,
-     142,   142,   -50,    46,    44,   -50,    41,   120,   -50,    80,
-     -50,   101,   176,   176,   -50,   -50,   -50,   -50,   -50,   126,
-     176,   176,    73,   165,   176,   176,   -50,   -50,   -50,   -50,
-     -50,   -50,   -50,   176,   176,   126,   126,   126,   142,   126,
-     -50,    38,   -50,   146,     5,    84,   168,    21,    29,   -50,
-     -50,   -50,    69,    37,    84,    53,     9,   183,   171,   142,
-      63,   142,   -50,   137,    35,   -50,   -50,   176,   176,   -50,
-     -50,   -50,   -50,   -50,    54,   102,   -50,   -50
+     155,   -35,   -35,   126,   116,     5,   -35,   -19,    -9,     1,
+     155,   155,   -35,    39,    29,    41,   108,   -35,    31,   -35,
+     135,   -35,   159,   159,   -35,   -35,   -35,   -35,   -35,   116,
+     159,   159,    61,   171,   159,   -35,   -35,   -35,   -35,   -35,
+     159,   159,   -35,   -35,   159,   116,   116,   116,   155,   116,
+     -35,    32,   -35,   112,     3,    74,   182,    38,    71,   -35,
+     -35,   -35,    64,     6,    74,    56,    16,    85,   126,   155,
+      77,   155,   -35,   145,    79,   -35,   -35,   159,   159,   -35,
+     -35,   -35,   -35,   -35,    83,    91,   -35,   -35
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -553,10 +554,10 @@ static const yytype_int16 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     2,     3,     0,     0,     0,     4,     6,     0,     0,
-      44,    45,    48,     0,     0,     7,     0,     0,     8,     0,
-      25,     0,     0,     0,    32,    46,    47,     1,    16,     0,
-       0,     0,     0,     0,     0,     0,    17,    18,    19,    20,
-      21,    22,    23,     0,     0,     0,     0,     0,     0,     0,
+      44,    45,    48,     0,     0,     0,     0,     8,     0,    25,
+       0,     7,     0,     0,    32,    46,    47,     1,    16,     0,
+       0,     0,     0,     0,     0,    17,    18,    19,    20,    21,
+       0,     0,    22,    23,     0,     0,     0,     0,     0,     0,
       39,    42,    40,     0,     0,    15,     0,     0,     0,    14,
       30,    13,     9,    10,    24,    26,    28,    27,    33,    35,
        0,    36,    29,     0,     0,     5,    31,     0,     0,    34,
@@ -566,14 +567,14 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -50,    77,   -50,     0,   -16,    79,   -50,   -50,    18,     2,
-      17,   -49,    34,   -17,    39,   -50
+     -35,    82,   -35,     0,   -15,    94,   -35,   -35,    -2,     2,
+      36,   -34,    42,   -16,    73,   -35
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     6,     7,    18,    19,     9,    44,    20,    21,    68,
+      -1,     6,     7,    17,    18,     9,    44,    19,    20,    68,
       69,    70,    51,    11,    12,    13
 };
 
@@ -582,67 +583,67 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       8,    32,    10,     8,    52,    22,    54,    55,    34,    35,
-       8,     8,    10,    10,    57,    58,    23,    45,    61,    62,
-      80,     8,    82,    50,    34,    35,    24,    63,    64,    43,
-      49,    71,    34,    35,    77,    33,    75,    74,    34,    35,
-      34,    35,    78,     1,     2,    43,    27,    56,     8,    25,
-      26,    59,    71,    43,    71,    29,    52,    34,    35,    43,
-      28,    84,    85,    65,    66,    67,    73,    72,     8,     8,
-      86,     8,    34,     8,    49,    50,    34,    35,    43,    36,
-      81,    15,    14,    34,    35,    79,    36,    34,    35,    59,
-       0,    37,    38,    39,    40,    41,    42,    43,    37,    38,
-      39,    40,    41,    42,    43,    34,    35,    83,    43,    45,
-      46,    47,     1,     2,     0,     3,    48,     0,    87,     0,
-       0,     0,    49,     0,     0,     4,    43,    16,     5,     0,
-       0,     1,     2,    16,    17,     0,     0,     1,     2,     0,
-      17,     0,     0,     0,     4,    30,    31,     0,     1,     2,
-       4,     3,    48,     1,     2,     0,     3,     1,     2,     0,
-      53,     4,     0,     0,     5,     0,     4,     0,     0,     5,
-       4,    30,    31,    45,    46,    47,    45,    46,    47,     0,
-       0,    60,     1,     2,    76,     3,    49,     1,     2,    49,
-      53,    45,    46,    47,     0,     4,     0,     0,     0,     0,
-       4,     0,     0,     0,    49
+       8,    32,    10,     8,    52,    22,    34,    54,    55,    34,
+       8,     8,    10,    10,    33,    57,    58,     1,     2,    61,
+       8,    23,    50,    45,    24,    62,    63,    56,    75,    64,
+      40,    41,    71,    40,    34,    80,    49,    82,    74,    27,
+      35,    34,    36,    65,    66,    67,    28,    72,     8,    37,
+      38,    39,    77,    71,    73,    71,    29,    52,    40,    41,
+      42,    43,    84,    85,    34,    40,    41,    34,     8,     8,
+      35,     8,    36,     8,    34,    50,    49,    34,    59,    37,
+      38,    39,    34,    25,    26,    78,    34,    21,    40,    41,
+      42,    43,    45,    46,    34,    47,    59,    14,    40,    41,
+      86,    40,    41,    81,    79,    49,    40,    41,    87,     0,
+      40,    41,    30,    31,    15,    83,    30,    31,    40,    41,
+       1,     2,    15,    16,     1,     2,     0,    53,     1,     2,
+       0,    16,     0,     0,     0,     0,     5,     0,     1,     2,
+       5,     3,    45,    46,     5,    47,     0,     1,     2,     0,
+       3,    48,     0,     0,     5,    49,     4,     1,     2,     0,
+       3,    48,     0,     5,     0,     0,     4,     1,     2,     0,
+       3,     1,     2,     5,    53,     0,     4,     0,    45,    46,
+       0,    47,     0,     5,     0,     0,     0,     5,    60,    45,
+      46,    49,    47,     0,     0,     0,     0,     0,     0,    76,
+       0,     0,    49
 };
 
 static const yytype_int8 yycheck[] =
 {
-       0,    17,     0,     3,    21,    30,    22,    23,     3,     4,
-      10,    11,    10,    11,    30,    31,    23,     8,    34,    35,
-      69,    21,    71,    21,     3,     4,    29,    43,    44,    24,
-      21,    48,     3,     4,    13,    17,    31,    53,     3,     4,
-       3,     4,    13,    11,    12,    24,     0,    29,    48,    10,
-      11,    16,    69,    24,    71,    14,    73,     3,     4,    24,
-      16,    77,    78,    45,    46,    47,    28,    49,    68,    69,
-      16,    71,     3,    73,    21,    73,     3,     4,    24,     6,
-      17,     4,     3,     3,     4,    68,     6,     3,     4,    16,
-      -1,    18,    19,    20,    21,    22,    23,    24,    18,    19,
-      20,    21,    22,    23,    24,     3,     4,    73,    24,     8,
-       9,    10,    11,    12,    -1,    14,    15,    -1,    16,    -1,
-      -1,    -1,    21,    -1,    -1,    24,    24,     7,    27,    -1,
-      -1,    11,    12,     7,    14,    -1,    -1,    11,    12,    -1,
-      14,    -1,    -1,    -1,    24,    25,    26,    -1,    11,    12,
-      24,    14,    15,    11,    12,    -1,    14,    11,    12,    -1,
-      14,    24,    -1,    -1,    27,    -1,    24,    -1,    -1,    27,
-      24,    25,    26,     8,     9,    10,     8,     9,    10,    -1,
-      -1,    16,    11,    12,    16,    14,    21,    11,    12,    21,
-      14,     8,     9,    10,    -1,    24,    -1,    -1,    -1,    -1,
-      24,    -1,    -1,    -1,    21
+       0,    16,     0,     3,    20,    24,     3,    22,    23,     3,
+      10,    11,    10,    11,    16,    30,    31,    12,    13,    34,
+      20,    30,    20,     7,    23,    40,    41,    29,    25,    44,
+      27,    28,    48,    27,     3,    69,    20,    71,    53,     0,
+       9,     3,    11,    45,    46,    47,    17,    49,    48,    18,
+      19,    20,    14,    69,    22,    71,    15,    73,    27,    28,
+      29,    30,    77,    78,     3,    27,    28,     3,    68,    69,
+       9,    71,    11,    73,     3,    73,    20,     3,    17,    18,
+      19,    20,     3,    10,    11,    14,     3,     5,    27,    28,
+      29,    30,     7,     8,     3,    10,    17,     3,    27,    28,
+      17,    27,    28,    26,    68,    20,    27,    28,    17,    -1,
+      27,    28,     4,     5,     6,    73,     4,     5,    27,    28,
+      12,    13,     6,    15,    12,    13,    -1,    15,    12,    13,
+      -1,    15,    -1,    -1,    -1,    -1,    28,    -1,    12,    13,
+      28,    15,     7,     8,    28,    10,    -1,    12,    13,    -1,
+      15,    16,    -1,    -1,    28,    20,    21,    12,    13,    -1,
+      15,    16,    -1,    28,    -1,    -1,    21,    12,    13,    -1,
+      15,    12,    13,    28,    15,    -1,    21,    -1,     7,     8,
+      -1,    10,    -1,    28,    -1,    -1,    -1,    28,    17,     7,
+       8,    20,    10,    -1,    -1,    -1,    -1,    -1,    -1,    17,
+      -1,    -1,    20
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    11,    12,    14,    24,    27,    33,    34,    35,    37,
-      41,    45,    46,    47,    37,    33,     7,    14,    35,    36,
-      39,    40,    30,    23,    29,    46,    46,     0,    16,    14,
-      25,    26,    36,    40,     3,     4,     6,    18,    19,    20,
-      21,    22,    23,    24,    38,     8,     9,    10,    15,    21,
-      41,    44,    45,    14,    36,    36,    40,    36,    36,    16,
-      16,    36,    36,    36,    36,    40,    40,    40,    41,    42,
-      43,    45,    40,    28,    36,    31,    16,    13,    13,    42,
-      43,    17,    43,    44,    36,    36,    16,    16
+       0,    12,    13,    15,    21,    28,    33,    34,    35,    37,
+      41,    45,    46,    47,    37,     6,    15,    35,    36,    39,
+      40,    33,    24,    30,    23,    46,    46,     0,    17,    15,
+       4,     5,    36,    40,     3,     9,    11,    18,    19,    20,
+      27,    28,    29,    30,    38,     7,     8,    10,    16,    20,
+      41,    44,    45,    15,    36,    36,    40,    36,    36,    17,
+      17,    36,    36,    36,    36,    40,    40,    40,    41,    42,
+      43,    45,    40,    22,    36,    25,    17,    14,    14,    42,
+      43,    26,    43,    44,    36,    36,    17,    17
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
@@ -1349,347 +1350,347 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 126 "smtlib.y"
+#line 108 "smtlib.y"
     {
-      varcheck((yyvsp[0].identifier)); (yyval.nonterm) = FN_mk_node((yyvsp[0].identifier), TK_ID);
+      varcheck((yyvsp[0].TK_identifier_t)); (yyval.NT_exp_t) = FN_mk_node((yyvsp[0].TK_identifier_t), TK_ID);
       /* Required for variable declaration 
       char *tmp = VR_vdecl; VR_vdecl = NULL;
       asprintf(&VR_vdecl, "%s%s", tmp, FN_mk_vdecl($1, "Int");
       free(tmp);
       */
     }
-#line 1362 "smtlib.tab.c"
+#line 1363 "smtlib.tab.c"
     break;
 
   case 3:
-#line 135 "smtlib.y"
-    { (yyval.nonterm) = FN_mk_node((yyvsp[0].literal), TK_CT); }
-#line 1368 "smtlib.tab.c"
+#line 117 "smtlib.y"
+    { (yyval.NT_exp_t) = FN_mk_node((yyvsp[0].TK_literal_t), TK_CT); }
+#line 1369 "smtlib.tab.c"
     break;
 
   case 4:
-#line 140 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1374 "smtlib.tab.c"
+#line 122 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1375 "smtlib.tab.c"
     break;
 
   case 5:
-#line 142 "smtlib.y"
+#line 124 "smtlib.y"
     { 
       char *tmp;
-      asprintf(&tmp, "(select %s %s)", (yyvsp[-3].nonterm)->body, (yyvsp[-1].nonterm)->body);
-      (yyval.nonterm) = FN_mk_node(tmp, NT_EXP_ARR);
-      free((yyvsp[-3].nonterm)->body); free((yyvsp[-1].nonterm)->body);
-      free((yyvsp[-3].nonterm)); free((yyvsp[-1].nonterm));
+      asprintf(&tmp, "(select %s %s)", (yyvsp[-3].NT_exp_t)->body, (yyvsp[-1].NT_exp_t)->body);
+      (yyval.NT_exp_t) = FN_mk_node(tmp, NT_EXP_ARR);
+      free((yyvsp[-3].NT_exp_t)->body); free((yyvsp[-1].NT_exp_t)->body);
+      free((yyvsp[-3].NT_exp_t)); free((yyvsp[-1].NT_exp_t));
     }
-#line 1386 "smtlib.tab.c"
+#line 1387 "smtlib.tab.c"
     break;
 
   case 6:
-#line 153 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1392 "smtlib.tab.c"
+#line 135 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1393 "smtlib.tab.c"
     break;
 
   case 7:
-#line 155 "smtlib.y"
+#line 137 "smtlib.y"
     {
         char *tmp;
-        asprintf(&tmp, "(- %s)", (yyvsp[0].nonterm));
-        (yyval.nonterm) = FN_mk_node(tmp, TK_MI_OP);
+        asprintf(&tmp, "(- %s)", (yyvsp[0].NT_exp_t));
+        (yyval.NT_exp_t) = FN_mk_node(tmp, TK_MI_OP);
     }
-#line 1402 "smtlib.tab.c"
+#line 1403 "smtlib.tab.c"
     break;
 
   case 8:
-#line 162 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1408 "smtlib.tab.c"
+#line 144 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1409 "smtlib.tab.c"
     break;
 
   case 9:
-#line 164 "smtlib.y"
+#line 146 "smtlib.y"
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(+ ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(+ ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1417 "smtlib.tab.c"
+#line 1418 "smtlib.tab.c"
     break;
 
   case 10:
-#line 169 "smtlib.y"
+#line 151 "smtlib.y"
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(- ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(- ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1426 "smtlib.tab.c"
+#line 1427 "smtlib.tab.c"
     break;
 
   case 11:
-#line 174 "smtlib.y"
+#line 156 "smtlib.y"
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(div ", (yyvsp[-3].nonterm)," ", (yyvsp[-1].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(div ", (yyvsp[-3].NT_exp_t)," ", (yyvsp[-1].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1435 "smtlib.tab.c"
+#line 1436 "smtlib.tab.c"
     break;
 
   case 12:
-#line 179 "smtlib.y"
+#line 161 "smtlib.y"
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", (yyvsp[-3].nonterm)," ", (yyvsp[-1].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", (yyvsp[-3].NT_exp_t)," ", (yyvsp[-1].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1444 "smtlib.tab.c"
+#line 1445 "smtlib.tab.c"
     break;
 
   case 13:
-#line 184 "smtlib.y"
+#line 166 "smtlib.y"
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(* ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(* ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1453 "smtlib.tab.c"
+#line 1454 "smtlib.tab.c"
     break;
 
   case 14:
-#line 188 "smtlib.y"
-    {(yyval.nonterm)=(yyvsp[-1].nonterm);}
-#line 1459 "smtlib.tab.c"
+#line 170 "smtlib.y"
+    {(yyval.NT_exp_t)=(yyvsp[-1].NT_exp_t);}
+#line 1460 "smtlib.tab.c"
     break;
 
   case 15:
-#line 192 "smtlib.y"
+#line 174 "smtlib.y"
     {  
       char *x;
-      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1469 "smtlib.tab.c"
+#line 1470 "smtlib.tab.c"
     break;
 
   case 16:
-#line 197 "smtlib.y"
-    {(yyval.nonterm)=(yyvsp[-1].nonterm);}
-#line 1475 "smtlib.tab.c"
+#line 179 "smtlib.y"
+    {(yyval.NT_exp_t)=(yyvsp[-1].NT_exp_t);}
+#line 1476 "smtlib.tab.c"
     break;
 
   case 17:
-#line 200 "smtlib.y"
-    { strcpy((yyval.nonterm),(yyvsp[0].int)); }
-#line 1481 "smtlib.tab.c"
+#line 182 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),(yyvsp[0].TK_simple_t)); }
+#line 1482 "smtlib.tab.c"
     break;
 
   case 18:
-#line 201 "smtlib.y"
-    { strcpy((yyval.nonterm),(yyvsp[0].int)); }
-#line 1487 "smtlib.tab.c"
+#line 183 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),(yyvsp[0].TK_simple_t)); }
+#line 1488 "smtlib.tab.c"
     break;
 
   case 19:
-#line 202 "smtlib.y"
-    { strcpy((yyval.nonterm),(yyvsp[0].int)); }
-#line 1493 "smtlib.tab.c"
+#line 184 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),(yyvsp[0].TK_simple_t)); }
+#line 1494 "smtlib.tab.c"
     break;
 
   case 20:
-#line 203 "smtlib.y"
-    { strcpy((yyval.nonterm),(yyvsp[0].int)); }
-#line 1499 "smtlib.tab.c"
+#line 185 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),(yyvsp[0].TK_simple_t)); }
+#line 1500 "smtlib.tab.c"
     break;
 
   case 21:
-#line 204 "smtlib.y"
-    { strcpy((yyval.nonterm),"="); }
-#line 1505 "smtlib.tab.c"
+#line 186 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),"="); }
+#line 1506 "smtlib.tab.c"
     break;
 
   case 22:
-#line 205 "smtlib.y"
-    { strcpy((yyval.nonterm),(yyvsp[0].int)); }
-#line 1511 "smtlib.tab.c"
+#line 187 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),(yyvsp[0].TK_simple_t)); }
+#line 1512 "smtlib.tab.c"
     break;
 
   case 23:
-#line 206 "smtlib.y"
-    { strcpy((yyval.nonterm),(yyvsp[0].int)); }
-#line 1517 "smtlib.tab.c"
+#line 188 "smtlib.y"
+    { strcpy((yyval.NT_exp_t),(yyvsp[0].TK_simple_t)); }
+#line 1518 "smtlib.tab.c"
     break;
 
   case 24:
-#line 210 "smtlib.y"
+#line 192 "smtlib.y"
     {
       int size;
-      if(strcmp((yyvsp[-1].nonterm),"!=")==0)
-      size = asprintf(&x, "%s%s%s%s%s%s", "(not (="," ",(yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),"))");
+      if(strcmp((yyvsp[-1].NT_exp_t),"!=")==0)
+      size = asprintf(&x, "%s%s%s%s%s%s", "(not (="," ",(yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),"))");
       else
-      size = asprintf(&x, "%s%s%s%s%s%s%s", "(",(yyvsp[-1].nonterm)," ",(yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")");
-      (yyval.nonterm)=x;
+      size = asprintf(&x, "%s%s%s%s%s%s%s", "(",(yyvsp[-1].NT_exp_t)," ",(yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")");
+      (yyval.NT_exp_t)=x;
     }
-#line 1530 "smtlib.tab.c"
+#line 1531 "smtlib.tab.c"
     break;
 
   case 25:
-#line 221 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1536 "smtlib.tab.c"
+#line 203 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1537 "smtlib.tab.c"
     break;
 
   case 26:
-#line 223 "smtlib.y"
+#line 205 "smtlib.y"
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(and ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(and ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1545 "smtlib.tab.c"
+#line 1546 "smtlib.tab.c"
     break;
 
   case 27:
-#line 228 "smtlib.y"
+#line 210 "smtlib.y"
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(=> ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(=> ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1554 "smtlib.tab.c"
+#line 1555 "smtlib.tab.c"
     break;
 
   case 28:
-#line 233 "smtlib.y"
+#line 215 "smtlib.y"
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(or ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(or ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1563 "smtlib.tab.c"
+#line 1564 "smtlib.tab.c"
     break;
 
   case 29:
-#line 238 "smtlib.y"
+#line 220 "smtlib.y"
     {
-      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].nonterm)," ", (yyvsp[0].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s%s%s", "(= ", (yyvsp[-2].NT_exp_t)," ", (yyvsp[0].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1572 "smtlib.tab.c"
+#line 1573 "smtlib.tab.c"
     break;
 
   case 30:
-#line 243 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[-1].nonterm); }
-#line 1578 "smtlib.tab.c"
+#line 225 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+#line 1579 "smtlib.tab.c"
     break;
 
   case 31:
-#line 246 "smtlib.y"
+#line 228 "smtlib.y"
     {
-      int size = asprintf(&x, "%s%s%s", "(not ",(yyvsp[-1].nonterm),")" );
-      (yyval.nonterm)=x;
+      int size = asprintf(&x, "%s%s%s", "(not ",(yyvsp[-1].NT_exp_t),")" );
+      (yyval.NT_exp_t)=x;
     }
-#line 1587 "smtlib.tab.c"
+#line 1588 "smtlib.tab.c"
     break;
 
   case 32:
-#line 268 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[-1].nonterm); }
-#line 1593 "smtlib.tab.c"
+#line 250 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+#line 1594 "smtlib.tab.c"
     break;
 
   case 33:
-#line 270 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1599 "smtlib.tab.c"
+#line 252 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1600 "smtlib.tab.c"
     break;
 
   case 34:
-#line 272 "smtlib.y"
-    { asprintf( &x, "(and %s %s)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1605 "smtlib.tab.c"
+#line 254 "smtlib.y"
+    { asprintf( &x, "(and %s %s)", (yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1606 "smtlib.tab.c"
     break;
 
   case 35:
-#line 274 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1611 "smtlib.tab.c"
+#line 256 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1612 "smtlib.tab.c"
     break;
 
   case 36:
-#line 275 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1617 "smtlib.tab.c"
+#line 257 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1618 "smtlib.tab.c"
     break;
 
   case 37:
-#line 277 "smtlib.y"
-    { asprintf( &x, "(and %s %s)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1623 "smtlib.tab.c"
+#line 259 "smtlib.y"
+    { asprintf( &x, "(and %s %s)", (yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1624 "smtlib.tab.c"
     break;
 
   case 38:
-#line 279 "smtlib.y"
-    { asprintf( &x, "(and %s %s)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1629 "smtlib.tab.c"
+#line 261 "smtlib.y"
+    { asprintf( &x, "(and %s %s)", (yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1630 "smtlib.tab.c"
     break;
 
   case 39:
-#line 281 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1635 "smtlib.tab.c"
+#line 263 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1636 "smtlib.tab.c"
     break;
 
   case 40:
-#line 282 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[0].nonterm); }
-#line 1641 "smtlib.tab.c"
+#line 264 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1642 "smtlib.tab.c"
     break;
 
   case 41:
-#line 283 "smtlib.y"
-    { (yyval.nonterm) = (yyvsp[-1].nonterm); }
-#line 1647 "smtlib.tab.c"
+#line 265 "smtlib.y"
+    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+#line 1648 "smtlib.tab.c"
     break;
 
   case 42:
-#line 286 "smtlib.y"
-    { asprintf( &x, "(ite %s %s true)", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1653 "smtlib.tab.c"
+#line 268 "smtlib.y"
+    { asprintf( &x, "(ite %s %s true)", (yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1654 "smtlib.tab.c"
     break;
 
   case 43:
-#line 288 "smtlib.y"
-    { asprintf( &x, "(ite %s %s %s)", (yyvsp[-3].nonterm), (yyvsp[-2].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1659 "smtlib.tab.c"
+#line 270 "smtlib.y"
+    { asprintf( &x, "(ite %s %s %s)", (yyvsp[-3].NT_exp_t), (yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1660 "smtlib.tab.c"
     break;
 
   case 44:
-#line 290 "smtlib.y"
-    { asprintf( &x, "(assert %s)", (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1665 "smtlib.tab.c"
+#line 272 "smtlib.y"
+    { asprintf( &x, "(assert %s)", (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1666 "smtlib.tab.c"
     break;
 
   case 45:
-#line 291 "smtlib.y"
-    { asprintf( &x, "(assert %s)", (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1671 "smtlib.tab.c"
+#line 273 "smtlib.y"
+    { asprintf( &x, "(assert %s)", (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1672 "smtlib.tab.c"
     break;
 
   case 46:
-#line 293 "smtlib.y"
-    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1677 "smtlib.tab.c"
+#line 275 "smtlib.y"
+    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1678 "smtlib.tab.c"
     break;
 
   case 47:
-#line 295 "smtlib.y"
-    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].nonterm), (yyvsp[0].nonterm) ); (yyval.nonterm) = x; }
-#line 1683 "smtlib.tab.c"
+#line 277 "smtlib.y"
+    { asprintf( &x, "(assert %s)\n%s", (yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t) ); (yyval.NT_exp_t) = x; }
+#line 1684 "smtlib.tab.c"
     break;
 
   case 48:
-#line 298 "smtlib.y"
-    { vardef(); asprintf( &x, "%s\n", (yyvsp[0].nonterm) ); fprintf( ofile_h, "%s", x ); }
-#line 1689 "smtlib.tab.c"
+#line 280 "smtlib.y"
+    { vardef(); asprintf( &x, "%s\n", (yyvsp[0].NT_exp_t) ); fprintf( ofile_h, "%s", x ); }
+#line 1690 "smtlib.tab.c"
     break;
 
 
-#line 1693 "smtlib.tab.c"
+#line 1694 "smtlib.tab.c"
 
       default: break;
     }
@@ -1921,7 +1922,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 302 "smtlib.y"
+#line 284 "smtlib.y"
 
 
 void yyerror (char const *s) {

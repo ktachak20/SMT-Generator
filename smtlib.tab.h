@@ -57,34 +57,34 @@ extern int yydebug;
   enum yytokentype
   {
     TK_MU_OP = 258,
-    TK_PL_OP = 259,
-    TK_UMI = 260,
-    TK_LT_OP = 261,
-    TK_NOT_OP = 262,
-    TK_AND_OP = 263,
-    TK_OR_OP = 264,
+    TK_DI_OP = 259,
+    TK_MO_OP = 260,
+    TK_NOT_OP = 261,
+    TK_AND_OP = 262,
+    TK_OR_OP = 263,
+    TK_LT_OP = 264,
     TK_IMP_OP = 265,
-    TK_ID = 266,
-    TK_CT = 267,
-    TK_CMM = 268,
-    TK_LB = 269,
-    TK_LP = 270,
-    TK_RB = 271,
-    TK_RP = 272,
-    TK_GT_OP = 273,
-    TK_LE_OP = 274,
-    TK_GE_OP = 275,
-    TK_EQ_OP = 276,
-    TK_NE_OP = 277,
-    TK_ASS_OP = 278,
-    TK_MI_OP = 279,
-    TK_DI_OP = 280,
-    TK_MO_OP = 281,
-    TK_IF = 282,
-    TK_ELSE = 283,
-    TK_ST_END = 284,
-    TK_LSQB = 285,
-    TK_RSQB = 286
+    TK_GT_OP = 266,
+    TK_ID = 267,
+    TK_CT = 268,
+    TK_CMM = 269,
+    TK_LB = 270,
+    TK_LP = 271,
+    TK_RB = 272,
+    TK_LE_OP = 273,
+    TK_GE_OP = 274,
+    TK_EQ_OP = 275,
+    TK_IF = 276,
+    TK_ELSE = 277,
+    TK_ST_END = 278,
+    TK_LSQB = 279,
+    TK_RSQB = 280,
+    TK_RP = 281,
+    TK_PL_OP = 282,
+    TK_MI_OP = 283,
+    TK_NE_OP = 284,
+    TK_ASS_OP = 285,
+    TK_UMI = 286
   };
 #endif
 
@@ -94,9 +94,9 @@ union YYSTYPE
 {
 #line 34 "smtlib.y"
 
-  char        *literal;
-  char        *identifier;
-  DATA_expr_t *nonterm;
+  char        *TK_literal_t;
+  char        *TK_identifier_t;
+  DATA_expr_t *NT_exp_t;
 
 #line 102 "smtlib.tab.h"
 

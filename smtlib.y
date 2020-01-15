@@ -32,69 +32,52 @@ char*       FN_mk_vdecl(char *, char *);
 }
 
 %union{
-  char        *literal;
-  char        *identifier;
-  DATA_expr_t *nonterm;
+  char        *TK_literal_t;
+  char        *TK_identifier_t;
+  DATA_expr_t *NT_exp_t;
 }
 
-%type <nonterm> primary_expression
-%type <nonterm> relational_operator
-%type <nonterm> primary_conditional_expression
-%type <nonterm> conditional_expression
-%type <nonterm> unary_expression
-%type <nonterm> expression
-%type <nonterm> assignment_expression
-%type <nonterm> assignments
-%type <nonterm> assignment_statement
-%type <nonterm> innerblock
-%type <nonterm> decision
-%type <nonterm> assertions
-%type <nonterm> mixed_statements
-%type <nonterm> postfix_expression
-%type <identifier> TK_ID
-%type <literal> TK_CT
-%type <int> TK_IF
-%type <int> TK_ELSE
-%type <int> TK_CMM
-%type <int> TK_LT_OP
-%type <int> TK_GT_OP
-%type <int> TK_LE_OP 
-%type <int> TK_GE_OP 
-%type <int> TK_EQ_OP 
-%type <int> TK_NE_OP 
-%type <int> TK_ASS_OP
-%type <int> TK_LSQB
-%type <int> TK_RSQB
+%type <NT_exp_t> primary_expression
+%type <NT_exp_t> relational_operator
+%type <NT_exp_t> primary_conditional_expression
+%type <NT_exp_t> conditional_expression
+%type <NT_exp_t> unary_expression
+%type <NT_exp_t> expression
+%type <NT_exp_t> assignment_expression
+%type <NT_exp_t> assignments
+%type <NT_exp_t> assignment_statement
+%type <NT_exp_t> innerblock
+%type <NT_exp_t> decision
+%type <NT_exp_t> assertions
+%type <NT_exp_t> mixed_statements
+%type <NT_exp_t> postfix_expression
 
-%token TK_MU_OP
-%token TK_PL_OP 
-%token TK_UMI
-%token TK_LT_OP 
-%token TK_NOT_OP
-%token TK_AND_OP
-%token TK_OR_OP
-%token TK_IMP_OP
-%token TK_ID
-%token TK_CT
-%token TK_CMM
-%token TK_LB 
-%token TK_LP 
-%token TK_RB
-%token TK_RP
-%token TK_GT_OP 
-%token TK_LE_OP  
-%token TK_GE_OP 
-%token TK_EQ_OP 
-%token TK_NE_OP 
-%token TK_ASS_OP
-%token TK_MI_OP
-%token TK_DI_OP 
-%token TK_MO_OP
-%token TK_IF
-%token TK_ELSE
-%token TK_ST_END
-%token TK_LSQB
-%token TK_RSQB
+%type <TK_identifier_t> TK_ID
+%type <TK_literal_t> TK_CT
+
+%type <TK_simple_t> TK_IF
+%type <TK_simple_t> TK_ELSE
+%type <TK_simple_t> TK_CMM
+%type <TK_simple_t> TK_LT_OP
+%type <TK_simple_t> TK_GT_OP
+%type <TK_simple_t> TK_LE_OP 
+%type <TK_simple_t> TK_GE_OP 
+%type <TK_simple_t> TK_EQ_OP 
+%type <TK_simple_t> TK_NE_OP 
+%type <TK_simple_t> TK_ASS_OP
+%type <TK_simple_t> TK_LSQB
+%type <TK_simple_t> TK_RSQB
+
+%token TK_MU_OP  TK_DI_OP  TK_MO_OP
+%token TK_NOT_OP TK_AND_OP TK_OR_OP
+%token TK_LT_OP  TK_IMP_OP TK_GT_OP 
+%token TK_ID 	 TK_CT 	   TK_CMM
+%token TK_LB 	 TK_LP 	   TK_RB
+%token TK_LE_OP  TK_GE_OP  TK_EQ_OP 
+%token TK_IF 	 TK_ELSE   TK_ST_END
+%token TK_LSQB   TK_RSQB   TK_RP
+%token TK_PL_OP  TK_MI_OP
+%token TK_NE_OP  TK_ASS_OP
 
 %start smtlib
 
@@ -115,7 +98,6 @@ char*       FN_mk_vdecl(char *, char *);
 %left  TK_DI_OP
 %left  TK_MU_OP
 %nonassoc TK_NOT_OP
-%nonassoc TK_UMI
 %nonassoc TK_IF
 %nonassoc TK_ELSE
 
