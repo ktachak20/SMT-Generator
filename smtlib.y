@@ -130,10 +130,14 @@ postfix_expression
     }
   ;
 
+unary_operator
+  : TK_MI_OP
+		{ $$ = FN_mk_node("-", TK_MI_OP); }
+
 unary_expression
   : postfix_expression
     { $$ = $1; }
-  | TK_MI_OP primary_expression %prec TK_UMI
+  | unary_operator unary_expression
     {
         char *tmp;
         asprintf(&tmp, "(- %s)", $2);
