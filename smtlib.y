@@ -11,27 +11,30 @@
 #define MAXVARS 100
 #define YYDEBUG 1
 
+#define NT_EXP_ARR  257
+
 FILE        *ofile_h;
 FILE        *vfile_h;
 char        *x;
-char        *vdec;              /* pointer to string of variable declarations. */
+char        *VR_vdec;              /* pointer to string of variable declarations. */
 extern int  yyparse();
 extern FILE *yyin;
 int         varcount = 0;
 char        *varlist[MAXVARS];
 int         vardef( void );
 int         varcheck( char * );
-
-typedef struct 
-{
-  char* string;
-  int   type;
-} DATA_expr;
+char*       FN_mk_vdecl(char *, char *);
 %}
 
+%code requires {
+  typedef struct { char *body; int type; } DATA_expr_t;
+  DATA_expr_t *FN_mk_node( char *, int );
+}
+
 %union{
-  int       term;
-  DATA_expr nonterm;
+  char        *literal;
+  char        *identifier;
+  DATA_expr_t *nonterm;
 }
 
 %type <nonterm> primary_expression
@@ -48,20 +51,20 @@ typedef struct
 %type <nonterm> assertions
 %type <nonterm> mixed_statements
 %type <nonterm> postfix_expression
-%type <term> TK_ID
-%type <term> TK_IF
-%type <term> TK_ELSE
-%type <term> TK_CMM
-%type <term> TK_CT
-%type <term> TK_LT_OP
-%type <term> TK_GT_OP
-%type <term> TK_LE_OP 
-%type <term> TK_GE_OP 
-%type <term> TK_EQ_OP 
-%type <term> TK_NE_OP 
-%type <term> TK_ASS_OP
-%type <term> TK_LSQB
-%type <term> TK_RSQB
+%type <identifier> TK_ID
+%type <literal> TK_CT
+%type <int> TK_IF
+%type <int> TK_ELSE
+%type <int> TK_CMM
+%type <int> TK_LT_OP
+%type <int> TK_GT_OP
+%type <int> TK_LE_OP 
+%type <int> TK_GE_OP 
+%type <int> TK_EQ_OP 
+%type <int> TK_NE_OP 
+%type <int> TK_ASS_OP
+%type <int> TK_LSQB
+%type <int> TK_RSQB
 
 %token TK_MU_OP
 %token TK_PL_OP 
@@ -120,24 +123,39 @@ typedef struct
 
 primary_expression
   : TK_ID /* {varcheck($1);strcpy($$,$1); } */
-    { /* TODO */ }
-  | TK_CT           {strcpy($$,$1); } 
+    {
+      varcheck($1); $$ = FN_mk_node($1, TK_ID);
+      /* Required for variable declaration 
+      char *tmp = VR_vdecl; VR_vdecl = NULL;
+      asprintf(&VR_vdecl, "%s%s", tmp, FN_mk_vdecl($1, "Int");
+      free(tmp);
+      */
+    }
+  | TK_CT /*          {strcpy($$,$1); } */
+    { $$ = FN_mk_node($1, TK_CT); }
 ;
 
 postfix_expression
   : primary_expression
     { $$ = $1; }
   | postfix_expression TK_LSQB expression TK_RSQB
-    { asprintf(&x, "(select %s %s)", $1, $3); $$ = x; }
+    { 
+      char *tmp;
+      asprintf(&tmp, "(select %s %s)", $1->body, $3->body);
+      $$ = FN_mk_node(tmp, NT_EXP_ARR);
+      free($1->body); free($3->body);
+      free($1); free($3);
+    }
   ;
 
 unary_expression
   : postfix_expression
-    { /* TODO */ }
-  | TK_MI_OP primary_expression %prec TK_UMI {
-        char *x;
-        int size = asprintf(&x, "%s%s%s", "(- ",$2,")" );
-        $$=x;
+    { $$ = $1; }
+  | TK_MI_OP primary_expression %prec TK_UMI
+    {
+        char *tmp;
+        asprintf(&tmp, "(- %s)", $2);
+        $$ = FN_mk_node(tmp, TK_MI_OP);
     };
 
 expression
@@ -337,4 +355,20 @@ int vardef()
   }
   fprintf(vfile_h, "%s", varlist[i]);
   return 1;
+}
+
+DATA_expr_t* FN_mk_node(char *s, int type)
+{
+  DATA_expr_t *node = malloc(sizeof(DATA_expr_t));
+  node->body = s;
+  node->type = type;
+
+  return node;
+}
+
+char* FN_mk_vdecl(char *v, char *v_t)
+{
+  char *decl;
+  asprintf(&decl, "(declare-const %s %s)\n", v, v_t);
+  return decl;
 }
