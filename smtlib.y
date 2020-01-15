@@ -32,6 +32,7 @@ char*       FN_mk_vdecl(char *, char *);
 }
 
 %union{
+	int					TK_simple_t;
   char        *TK_literal_t;
   char        *TK_identifier_t;
   DATA_expr_t *NT_exp_t;
@@ -72,10 +73,10 @@ char*       FN_mk_vdecl(char *, char *);
 %token TK_MU_OP  TK_DI_OP  TK_MO_OP
 %token TK_NOT_OP TK_AND_OP TK_OR_OP
 %token TK_LT_OP  TK_IMP_OP TK_GT_OP 
-%token TK_ID 	 TK_CT 	   TK_CMM
-%token TK_LB 	 TK_LP 	   TK_RB
+%token TK_ID 	 	 TK_CT 	   TK_CMM
+%token TK_LB 	 	 TK_LP 	   TK_RB
 %token TK_LE_OP  TK_GE_OP  TK_EQ_OP 
-%token TK_IF 	 TK_ELSE   TK_ST_END
+%token TK_IF 	 	 TK_ELSE   TK_ST_END
 %token TK_LSQB   TK_RSQB   TK_RP
 %token TK_PL_OP  TK_MI_OP
 %token TK_NE_OP  TK_ASS_OP
@@ -236,22 +237,6 @@ conditional_expression
     }
   ;
 
-/* COMMENTED: by ktachak 191219
-assignment_list
-	: assignment_list assignment_expression 
-	{
-		int size=asprintf(&x, "(and %s %s)",$1,$2);
-	 	$$=x;
-
-	}| 
-	assignment_expression
-	{
-	 	$$=$1;	
-	}
-;
-*/
-
-/* AUTHOR: ktachak 191219 */
 assignment_statement: assignment_expression TK_ST_END { $$ = $1; }
                     ;
 assignments: assignment_statement   { $$ = $1; }
@@ -284,7 +269,6 @@ assertions: assignment_statement { asprintf( &x, "(assert %s)", $1 ); $$ = x; }
 smtlib:
         assertions { vardef(); asprintf( &x, "%s\n", $1 ); fprintf( ofile_h, "%s", x ); }
       ;
-/* ktachak 191219 */
 
 %%
 
