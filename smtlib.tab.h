@@ -83,8 +83,7 @@ extern int yydebug;
     TK_PL_OP = 282,
     TK_MI_OP = 283,
     TK_NE_OP = 284,
-    TK_ASS_OP = 285,
-    TK_UMI = 286
+    TK_ASS_OP = 285
   };
 #endif
 
@@ -98,7 +97,7 @@ union YYSTYPE
   char        *TK_identifier_t;
   DATA_expr_t *NT_exp_t;
 
-#line 102 "smtlib.tab.h"
+#line 101 "smtlib.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

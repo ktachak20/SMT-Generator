@@ -51,6 +51,7 @@ char*       FN_mk_vdecl(char *, char *);
 %type <NT_exp_t> assertions
 %type <NT_exp_t> mixed_statements
 %type <NT_exp_t> postfix_expression
+%type <NT_exp_t> unary_operator
 
 %type <TK_identifier_t> TK_ID
 %type <TK_literal_t> TK_CT
