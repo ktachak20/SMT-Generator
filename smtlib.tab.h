@@ -44,7 +44,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 29 "smtlib.y"
+#line 30 "smtlib.y"
 
   typedef struct { char *body; int type; } DATA_expr_t;
   DATA_expr_t *FN_mk_node( char *, int );
@@ -91,13 +91,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 34 "smtlib.y"
+#line 35 "smtlib.y"
 
+  int         TK_simple_t;
   char        *TK_literal_t;
   char        *TK_identifier_t;
   DATA_expr_t *NT_exp_t;
 
-#line 101 "smtlib.tab.h"
+#line 102 "smtlib.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
