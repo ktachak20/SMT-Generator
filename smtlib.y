@@ -106,7 +106,6 @@ char*       FN_mk_vdecl(char *, char *);
 
 %%
 
-/* TODO: Delegate variable declaration to grammar for postfix_expression */
 primary_expression
   : TK_ID /* {varcheck($1);strcpy($$,$1); } */
     { $$ = FN_mk_node($1, TK_ID); }
@@ -128,7 +127,7 @@ postfix_expression
       }
 
       asprintf(&tmp, "(select %s %s)", $1->body, $3->body);
-      $$ = FN_mk_node(tmp, NT_EXP_ARR);
+      $$ = FN_mk_node(tmp, NT_PST_EXP);
       free($1->body); free($3->body);
       free($1); free($3);
     }
@@ -136,7 +135,8 @@ postfix_expression
 
 unary_operator
   : TK_MI_OP
-                { $$ = FN_mk_node("-", TK_MI_OP); }
+    { $$ = FN_mk_node("-", TK_MI_OP); }
+  ;
 
 unary_expression
   : postfix_expression
@@ -145,34 +145,22 @@ unary_expression
     {
         char *tmp;
         asprintf(&tmp, "(- %s)", $2);
-        $$ = FN_mk_node(tmp, TK_MI_OP);
+        $$ = FN_mk_node(tmp, NT_UN_EXP);
     };
+
+operator
+  : TK_PL_OP   { $$ = FN_mk_node("+", TK_PL_OP); }
+  | TK_MI_OP   { $$ = FN_mk_node("-", TK_MI_OP); }
+  | TK_MU_OP   { $$ = FN_mk_node("*", TK_MU_OP); }
+  | TK_DI_OP   { $$ = FN_mk_node("div", TK_DI_OP); }
+  | TK_MO_OP   { $$ = FN_mk_node("mod", TK_MO_OP); }
+  ;
 
 expression
   : unary_expression
     { $$ = $1; }
-  | expression TK_DI_OP expression /* TK_LB TK_DI_OP expression TK_CMM expression TK_RB */
-    { 
-        $$ = FN_gen_exp($1, $2, TK_DI_OP);
-    }
-  | expression TK_MO_OP expression /* TK_LB TK_MO_OP expression TK_CMM expression TK_RB */
-    { 
-        $$ = FN_gen_exp($1, $2, TK_MO_OP);
-    }
-  | expression TK_MU_OP expression
-    { 
-        $$ = FN_gen_exp($1, $2, TK_MU_OP);
-    }
-  | expression TK_PL_OP expression
-    { 
-        $$ = FN_gen_exp($1, $2, TK_PL_OP);
-    }
-  | expression TK_MI_OP expression
-    { 
-        $$ = FN_gen_exp($1, $2, TK_MI_OP);
-    }
-  | TK_LB expression TK_RB
-    { $$ = $2; };
+  | expression operator expression
+    { $$ = FN_gen_exp($1, $3, $2->type); }
   ;
 
 assignment_expression
@@ -180,106 +168,90 @@ assignment_expression
     {
         char *exp;
 
-        if( $1->type == NT_EXP_ARR )
-        {
-            asprintf(&exp, "(store %s %s)", $1->body, $3->body);
-        }
-        else
-        {
-            asprintf(&exp, "(= %s %s)", $1->body, $3->body);
-        }
-        $$ = FN_mk_node(exp, NT_EXP_ASSN);
+        asprintf(&exp, "(= %s %s)", $1->body, $3->body);
+        $$ = FN_mk_node(exp, NT_ASSN_EXP);
 
         free($1->body); free($1);
         free($3->body); free($3); /* replace with a macro */
-        /* TODO: to be continued */
     } 
-  | TK_LB assignment_expression TK_RB {$$=$2;};
+  | TK_LB assignment_expression TK_RB
+    { $$ = $2; }
   ;
+
 relational_operator
-  : TK_LT_OP   { strcpy($$,$1); }
-  | TK_GT_OP   { strcpy($$,$1); }
-  | TK_LE_OP   { strcpy($$,$1); }
-  | TK_GE_OP   { strcpy($$,$1); }
-  | TK_EQ_OP   { strcpy($$,"="); } /*== operator*/
-  | TK_NE_OP   { strcpy($$,$1); }
-  | TK_ASS_OP   { strcpy($$,$1); }
+  : TK_LT_OP   { $$ = FN_mk_node("<", TK_LT_OP); }
+  | TK_GT_OP   { $$ = FN_mk_node(">", TK_GT_OP); }
+  | TK_LE_OP   { $$ = FN_mk_node("<=", TK_LE_OP); }
+  | TK_GE_OP   { $$ = FN_mk_node(">=", TK_GE_OP); }
+  | TK_EQ_OP   { $$ = FN_mk_node("=", TK_GE_OP); } /*== operator*/
+  | TK_NE_OP   { $$ = FN_mk_node("neq", TK_NE_OP); }
+  | TK_ASS_OP  { $$ = FN_mk_node("=", TK_NE_OP); }
   ;
 
 primary_conditional_expression
-  : expression relational_operator expression{
-      int size;
-      if(strcmp($2,"!=")==0)
-      size = asprintf(&x, "%s%s%s%s%s%s", "(not (="," ",$1," ", $3,"))");
-      else
-      size = asprintf(&x, "%s%s%s%s%s%s%s", "(",$2," ",$1," ", $3,")");
-      $$=x;
-    }
+  : expression relational_operator expression
+    { $$ = FN_gen_exp($1, $3, $2->type); NODE_free($2); }
   ;
 
-conditional_expression
-  : primary_conditional_expression  { $$ = $1; }
-  | conditional_expression TK_AND_OP conditional_expression 
-    {
-      int size = asprintf(&x, "%s%s%s%s%s", "(and ", $1," ", $3,")" );
-      $$=x;
-    }
-  | conditional_expression TK_IMP_OP conditional_expression 
-    {
-      int size = asprintf(&x, "%s%s%s%s%s", "(=> ", $1," ", $3,")" );
-      $$=x;
-    } 
-  | conditional_expression TK_OR_OP conditional_expression
-    {
-      int size = asprintf(&x, "%s%s%s%s%s", "(or ", $1," ", $3,")" );
-      $$=x;
-    }
-  | conditional_expression TK_EQ_OP conditional_expression 
-    {
-      int size = asprintf(&x, "%s%s%s%s%s", "(= ", $1," ", $3,")" );
-      $$=x;
-    }
+logical_operator:   TK_AND_OP { $$ = FN_mk_node("and", TK_AND_OP); }
+                |   TK_OR_OP  { $$ = FN_mk_node("or", TK_OR_OP); }
+                |   TK_IMP_OP { $$ = FN_mk_node("=>", TK_IMP_OP); }
+                |   TK_EQ_OP  { $$ = FN_mk_node("=", TK_EQ_OP); }
+                ;
 
-  | TK_LB conditional_expression TK_RB   { $$ = $2; }
-
-  |TK_NOT_OP TK_LB conditional_expression TK_RB    
-    {
-      int size = asprintf(&x, "%s%s%s", "(not ",$3,")" );
-      $$=x;
-    }
-  ;
+conditional_expression: primary_conditional_expression
+                        { $$ = $1; }
+                      | TK_NOT conditional_expression
+                        { $$ = FN_gen_exp_unary($2, TK_NOT); }
+                      | conditional_expression logical_operator conditional_expression
+                        { $$ = FN_gen_exp($1, $3, $2->type); NODE_free($2); }
+                      | TK_LB conditional_expression TK_RB
+                        { $$ = $2; }
+                      ;
 
 assignment_statement: assignment_expression TK_ST_END { $$ = $1; }
                     ;
-assignments: assignment_statement   { $$ = $1; }
-           | assignment_statement assignments
-             { asprintf( &x, "(and %s %s)", $1, $2 ); $$ = x; }
+
+assignments: assignment_statement             { $$ = $1; }
+           | assignment_statement assignments { $$ = FN_gen_conjunc($1, $2); }
            ;
+
 mixed_statements: assignments { $$ = $1; }
                 | decision    { $$ = $1; }
-                | assignments mixed_statements 
-                  { asprintf( &x, "(and %s %s)", $1, $2 ); $$ = x; }
-                | decision mixed_statements 
-                  { asprintf( &x, "(and %s %s)", $1, $2 ); $$ = x; }
+                | assignments mixed_statements { $$ = FN_gen_conjunc($1, $2); }
+                | decision mixed_statements    { $$ = FN_gen_conjunc($1, $2); }
                 ;
+
 innerblock: assignment_statement         { $$ = $1; }
           | decision                     { $$ = $1; }
           | TK_LP mixed_statements TK_RP { $$ = $2; }
           ;
+
 decision: TK_IF conditional_expression innerblock 
-          { asprintf( &x, "(ite %s %s true)", $2, $3 ); $$ = x; }
+          { $$ = FN_gen_impl($2, $3, NULL); }
         | TK_IF conditional_expression innerblock TK_ELSE innerblock
-          { asprintf( &x, "(ite %s %s %s)", $2, $3, $5 ); $$ = x; }
+          { $$ = FN_gen_impl($2, $3, $5); }
         ;
-assertions: assignment_statement { asprintf( &x, "(assert %s)", $1 ); $$ = x; }
-          | decision    { asprintf( &x, "(assert %s)", $1 ); $$ = x; }
+
+assertions: assignment_statement { $$ = FN_gen_assert($1); }
           | assignment_statement assertions
-            { asprintf( &x, "(assert %s)\n%s", $1, $2 ); $$ = x; }
+            {
+                char *assrt;
+                asprintf(&assrt, "(assert %s)\n%s)", $1->body, $2->body);
+                NODE_free($1); NODE_free($2);
+                $$ = FN_mk_node(assrt, NT_ASSRT);
+            }
+          | decision    { $$ = FN_gen_assert($1); }
           | decision assertions
-            { asprintf( &x, "(assert %s)\n%s", $1, $2 ); $$ = x; }
+            {
+                char *assrt;
+                asprintf(&assrt, "(assert %s)\n%s)", $1->body, $2->body);
+                NODE_free($1); NODE_free($2);
+                $$ = FN_mk_node(assrt, NT_ASSRT);
+            }
           ;
 smtlib:
-        assertions { vardef(); asprintf( &x, "%s\n", $1 ); fprintf( ofile_h, "%s", x ); }
+        assertions { vardef(); FN_write_node_to_file(ofile, $1); NODE_free($1); }
       ;
 
 %%
@@ -360,18 +332,6 @@ DATA_expr_t* FN_gen_exp(DATA_expr_t *nleft, DATA_expr_t *nright, int op_t)
 {
     char *exp;
 
-    if( nleft->type == NT_EXP_ARR )
-    {
-      /* TODO generate select string for nleft */
-      asprintf(&(nleft->body), "(select %s)", nleft->body);
-    }
-
-    if( rleft->type == NT_EXP_ARR )
-    {
-      /* TODO generate select string for $2 */
-      asprintf(&(rleft->body), "(select %s)", rleft->body);
-    }
-    
     switch(op_t)
     {
     case TK_PL_OP:
@@ -389,11 +349,70 @@ DATA_expr_t* FN_gen_exp(DATA_expr_t *nleft, DATA_expr_t *nright, int op_t)
     case TK_MO_OP:
         asprintf(&exp, "(mod %s %s)", nleft->body, rleft->body);
         break;
+    case TK_LT_OP:
+        asprintf(&exp, "(< %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_GT_OP:
+        asprintf(&exp, "(> %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_LE_OP:
+        asprintf(&exp, "(<= %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_GE_OP:
+        asprintf(&exp, "(>= %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_NE_OP:
+        asprintf(&exp, "(not (= %s %s))", nleft->body, rleft->body);
+        break;
+    case TK_IMP:
+        asprintf(&exp, "(=> %s %s)", nleft->body, rleft->body);
+        break;
     default:
         printf("\nInvalid syntax: Operator no recognized!\n");
+        exit(-1); break;
 
     free(nleft->body); free(nleft);
     free(rleft->body); free(rleft);
 
-    return FN_mk_node(exp, NT_EXP_EXP);
+    return FN_mk_node(exp, NT_EXP);
+}
+
+DATA_expr_t* FN_gen_conjunc(DATA_expr_t *nstart, DATA_expr_t *nend)
+{
+    char *assn;
+    asprintf(&assn, "(and %s %s)", nstart->body, nend->body);
+    NODE_free(nstart); NODE_free(nend);
+
+    return FN_mk_node(assn, NT_CONJ);
+}
+
+DATA_expr_t* FN_gen_impl(DATA_expr_t *ncond, DATA_expr_t *nbranch1, DATA_expr_t *nbranch2)
+{
+    char *impl;
+
+    if( nbranch2 == NULL )
+    {
+        asprintf(&impl, "(ite %s %s (= 1 1))", ncond->body, nbranch1);
+    }
+    else
+    {
+        asprintf(&impl, "(ite %s %s %s)", ncond->body, nbranch1->body, nbranch2->body);
+    }
+
+    NODE_free(ncond); NODE_free(nconclusion);
+    return FN_mk_node(impl, NT_IMPL);
+}
+
+DATA_expr_t* FN_gen_assert(DATA_expr_t *stmt)
+{
+    char *assert;
+    asprintf(&assert, "(assert %s)", stmt->body);
+    NODE_free(stmt);
+    return FN_mk_node(assert, NT_ASSRT);
+}
+
+void FN_write_node_to_file(DATA_expr_t *node, char *fname)
+{
+    FILE *fname_h = fopen(fname, "w");
+    fprintf(fname_h, "%s", node->body);
 }
