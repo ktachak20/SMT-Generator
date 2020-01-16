@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #define MAXVARS 100
 #define YYDEBUG 1
 
@@ -20,7 +21,7 @@ char        *VR_vdec;              /* pointer to string of variable declarations
 extern int  yyparse();
 extern FILE *yyin;
 int         varcount = 0;
-char        *varlist[MAXVARS];
+char        *varlist[MAXVARS][2]; /* variable names and associated type */
 int         vardef( void );
 int         varcheck( char * );
 char*       FN_mk_vdecl(char *, char *);
@@ -32,7 +33,7 @@ char*       FN_mk_vdecl(char *, char *);
 }
 
 %union{
-	int					TK_simple_t;
+  int         TK_simple_t;
   char        *TK_literal_t;
   char        *TK_identifier_t;
   DATA_expr_t *NT_exp_t;
@@ -73,10 +74,10 @@ char*       FN_mk_vdecl(char *, char *);
 %token TK_MU_OP  TK_DI_OP  TK_MO_OP
 %token TK_NOT_OP TK_AND_OP TK_OR_OP
 %token TK_LT_OP  TK_IMP_OP TK_GT_OP 
-%token TK_ID 	 TK_CT 	   TK_CMM
-%token TK_LB 	 TK_LP 	   TK_RB
+%token TK_ID     TK_CT     TK_CMM
+%token TK_LB     TK_LP     TK_RB
 %token TK_LE_OP  TK_GE_OP  TK_EQ_OP 
-%token TK_IF 	 TK_ELSE   TK_ST_END
+%token TK_IF     TK_ELSE   TK_ST_END
 %token TK_LSQB   TK_RSQB   TK_RP
 %token TK_PL_OP  TK_MI_OP
 %token TK_NE_OP  TK_ASS_OP
@@ -105,26 +106,27 @@ char*       FN_mk_vdecl(char *, char *);
 
 %%
 
+/* TODO: Delegate variable declaration to grammar for postfix_expression */
 primary_expression
   : TK_ID /* {varcheck($1);strcpy($$,$1); } */
-    {
-      varcheck($1); $$ = FN_mk_node($1, TK_ID);
-      /* Required for variable declaration 
-      char *tmp = VR_vdecl; VR_vdecl = NULL;
-      asprintf(&VR_vdecl, "%s%s", tmp, FN_mk_vdecl($1, "Int");
-      free(tmp);
-      */
-    }
+    { $$ = FN_mk_node($1, TK_ID); }
   | TK_CT /*          {strcpy($$,$1); } */
     { $$ = FN_mk_node($1, TK_CT); }
-;
+  ;
 
 postfix_expression
   : primary_expression
-    { $$ = $1; }
+    { varcheck($1); $$ = $1; }
   | postfix_expression TK_LSQB expression TK_RSQB
     { 
       char *tmp;
+
+      if( $1->type == TK_ID )
+      {
+        /* Check variable is already defined and set. */
+        varcheck($1);
+      }
+
       asprintf(&tmp, "(select %s %s)", $1->body, $3->body);
       $$ = FN_mk_node(tmp, NT_EXP_ARR);
       free($1->body); free($3->body);
@@ -134,7 +136,7 @@ postfix_expression
 
 unary_operator
   : TK_MI_OP
-		{ $$ = FN_mk_node("-", TK_MI_OP); }
+                { $$ = FN_mk_node("-", TK_MI_OP); }
 
 unary_expression
   : postfix_expression
@@ -147,41 +149,51 @@ unary_expression
     };
 
 expression
-  : unary_expression              { $$ = $1; }
-  | expression TK_PL_OP expression
+  : unary_expression
+    { $$ = $1; }
+  | expression TK_DI_OP expression /* TK_LB TK_DI_OP expression TK_CMM expression TK_RB */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(+ ", $1," ", $3,")" );
-      $$=x;
+        $$ = FN_gen_exp($1, $2, TK_DI_OP);
     }
-  | expression TK_MI_OP expression
+  | expression TK_MO_OP expression /* TK_LB TK_MO_OP expression TK_CMM expression TK_RB */
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(- ", $1," ", $3,")" );
-      $$=x;
-    }
-  | TK_LB TK_DI_OP expression TK_CMM expression TK_RB
-    { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(div ", $3," ", $5,")" );
-      $$=x;
-    }
-  | TK_LB TK_MO_OP expression TK_CMM expression TK_RB
-    { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(mod ", $3," ", $5,")" );
-      $$=x;
+        $$ = FN_gen_exp($1, $2, TK_MO_OP);
     }
   | expression TK_MU_OP expression
     { 
-      int size = asprintf(&x, "%s%s%s%s%s", "(* ", $1," ", $3,")" );
-      $$=x;
+        $$ = FN_gen_exp($1, $2, TK_MU_OP);
     }
-  | TK_LB expression TK_RB {$$=$2;};
+  | expression TK_PL_OP expression
+    { 
+        $$ = FN_gen_exp($1, $2, TK_PL_OP);
+    }
+  | expression TK_MI_OP expression
+    { 
+        $$ = FN_gen_exp($1, $2, TK_MI_OP);
+    }
+  | TK_LB expression TK_RB
+    { $$ = $2; };
   ;
 
 assignment_expression
-  : unary_expression TK_ASS_OP expression{  
-      char *x;
-      int size = asprintf(&x, "%s%s%s%s%s", "(= ", $1," ", $3,")" );
-      $$=x;
-    }
+  : unary_expression TK_ASS_OP expression
+    {
+        char *exp;
+
+        if( $1->type == NT_EXP_ARR )
+        {
+            asprintf(&exp, "(store %s %s)", $1->body, $3->body);
+        }
+        else
+        {
+            asprintf(&exp, "(= %s %s)", $1->body, $3->body);
+        }
+        $$ = FN_mk_node(exp, NT_EXP_ASSN);
+
+        free($1->body); free($1);
+        free($3->body); free($3); /* replace with a macro */
+        /* TODO: to be continued */
+    } 
   | TK_LB assignment_expression TK_RB {$$=$2;};
   ;
 relational_operator
@@ -279,22 +291,22 @@ void yyerror (char const *s) {
 
 
 int callSMTLIBparser( char *ifile )
-{	
+{       
   char *vfile, *ofile;
-	yyin = fopen( ifile ,"r");
-	if(yyin==NULL)
-		return 0;
+        yyin = fopen( ifile ,"r");
+        if(yyin==NULL)
+                return 0;
   asprintf( &ofile, "%s.smt", ifile );
-	ofile_h = fopen( ofile, "w" );
+        ofile_h = fopen( ofile, "w" );
   asprintf( &vfile, "%s.var", ifile );
   vfile_h = fopen( vfile, "w" );
-	if(yyparse())
-	{	
-		printf("Error\n");
-		return 0;	
-	}
-	fclose(yyin);
-	fclose(ofile_h);
+        if(yyparse())
+        {       
+                printf("Error\n");
+                return 0;       
+        }
+        fclose(yyin);
+        fclose(ofile_h);
   free( ofile );
   free( vfile );
   return 0;
@@ -342,4 +354,46 @@ char* FN_mk_vdecl(char *v, char *v_t)
   char *decl;
   asprintf(&decl, "(declare-const %s %s)\n", v, v_t);
   return decl;
+}
+
+DATA_expr_t* FN_gen_exp(DATA_expr_t *nleft, DATA_expr_t *nright, int op_t)
+{
+    char *exp;
+
+    if( nleft->type == NT_EXP_ARR )
+    {
+      /* TODO generate select string for nleft */
+      asprintf(&(nleft->body), "(select %s)", nleft->body);
+    }
+
+    if( rleft->type == NT_EXP_ARR )
+    {
+      /* TODO generate select string for $2 */
+      asprintf(&(rleft->body), "(select %s)", rleft->body);
+    }
+    
+    switch(op_t)
+    {
+    case TK_PL_OP:
+        asprintf(&exp, "(+ %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_MI_OP:
+        asprintf(&exp, "(- %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_MU_OP:
+        asprintf(&exp, "(* %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_DI_OP:
+        asprintf(&exp, "(mod %s %s)", nleft->body, rleft->body);
+        break;
+    case TK_MO_OP:
+        asprintf(&exp, "(mod %s %s)", nleft->body, rleft->body);
+        break;
+    default:
+        printf("\nInvalid syntax: Operator no recognized!\n");
+
+    free(nleft->body); free(nleft);
+    free(rleft->body); free(rleft);
+
+    return FN_mk_node(exp, NT_EXP_EXP);
 }
