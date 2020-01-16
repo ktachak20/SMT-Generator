@@ -201,8 +201,8 @@ logical_operator:   TK_AND_OP { $$ = FN_mk_node("and", TK_AND_OP); }
 
 conditional_expression: primary_conditional_expression
                         { $$ = $1; }
-                      | TK_NOT conditional_expression
-                        { $$ = FN_gen_exp_unary($2, TK_NOT); }
+                      | TK_NOT_OP conditional_expression
+                        { $$ = FN_gen_exp_unary($2, TK_NOT_OP); }
                       | conditional_expression logical_operator conditional_expression
                         { $$ = FN_gen_exp($1, $3, $2->type); NODE_free($2); }
                       | TK_LB conditional_expression TK_RB
