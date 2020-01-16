@@ -14,8 +14,8 @@ L     [a-zA-Z_]
 "if"          { /* yylval.string=strdup(yytext);*/ return(TK_IF); }
 "else"        { /* yylval.string=strdup(yytext);*/ return(TK_ELSE); }
 
-{L}({L}|{D})* { yylval.identifier = strdup(yytext); return(TK_ID); }
-{D}+          { yylval.literal    = strdup(yytext); return(TK_CT); }
+{L}({L}|{D})* { yylval.TK_identifier_t = strdup(yytext); return(TK_ID); }
+{D}+          { yylval.TK_literal_t    = strdup(yytext); return(TK_CT); }
 
 "["           { /* yylval.string=strdup(yytext);*/ return(TK_LSQB); }
 "]"           { /* yylval.string=strdup(yytext);*/ return(TK_RSQB); }

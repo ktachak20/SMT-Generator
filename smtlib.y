@@ -13,23 +13,41 @@
 #define YYDEBUG 1
 
 #define NT_EXP_ARR  257
+#define NT_PST_EXP  258
+#define NT_UN_EXP   259
+#define NT_ASSN_EXP 260
+#define NT_ASSRT    261
+#define NT_EXP      262
+#define NT_CONJ     263
+#define NT_IMPL     264
 
-FILE        *ofile_h;
-FILE        *vfile_h;
+#define NODE_free(n) \
+    free((n)->body); free(n);
+
+typedef struct _DATA_expr_t { char *body; int type; } DATA_expr_t;
+
+char        *ofile;
+char        *vfile;
 char        *x;
 char        *VR_vdec;              /* pointer to string of variable declarations. */
 extern int  yyparse();
 extern FILE *yyin;
 int         varcount = 0;
-char        *varlist[MAXVARS][2]; /* variable names and associated type */
+DATA_expr_t varlist[MAXVARS]; /* variable names and associated type */
 int         vardef( void );
-int         varcheck( char * );
+int         varcheck( DATA_expr_t * );
 char*       FN_mk_vdecl(char *, char *);
+DATA_expr_t *FN_mk_node( char *, int );
+void        FN_write_node_to_file( DATA_expr_t *, char *);
+DATA_expr_t *FN_gen_assert( DATA_expr_t *stmt );
+DATA_expr_t *FN_gen_impl( DATA_expr_t *ncond, DATA_expr_t *nbranch1, DATA_expr_t *nbranch2 );
+DATA_expr_t *FN_gen_conjunc( DATA_expr_t *nstart, DATA_expr_t *nend );
+DATA_expr_t *FN_gen_exp( DATA_expr_t *nleft, DATA_expr_t *nright, int op_t );
+DATA_expr_t *FN_gen_exp_unary( DATA_expr_t *, int );
 %}
 
-%code requires {
-  typedef struct { char *body; int type; } DATA_expr_t;
-  DATA_expr_t *FN_mk_node( char *, int );
+%code requires{
+    typedef struct _DATA_expr_t DATA_expr_t;
 }
 
 %union{
@@ -144,11 +162,8 @@ unary_expression
   : postfix_expression
     { $$ = $1; }
   | unary_operator unary_expression
-    {
-        char *tmp;
-        asprintf(&tmp, "(- %s)", $2);
-        $$ = FN_mk_node(tmp, NT_UN_EXP);
-    };
+    { $$ = FN_gen_exp_unary($2, $1->type); NODE_free($1); }
+  ;
 
 operator
   : TK_PL_OP   { $$ = FN_mk_node("+", TK_PL_OP); }
@@ -252,58 +267,61 @@ assertions: assignment_statement { $$ = FN_gen_assert($1); }
                 $$ = FN_mk_node(assrt, NT_ASSRT);
             }
           ;
-smtlib:
-        assertions { vardef(); FN_write_node_to_file(ofile, $1); NODE_free($1); }
+
+smtlib: assertions
+        { vardef(); FN_write_node_to_file($1, ofile); NODE_free($1); }
       ;
 
 %%
 
+/** TODO: change later
 void yyerror (char const *s) {
    fprintf (stderr, "%s\n", s);
    exit(0);
 }
+*/
 
 
 int callSMTLIBparser( char *ifile )
 {       
-  char *vfile, *ofile;
-        yyin = fopen( ifile ,"r");
-        if(yyin==NULL)
-                return 0;
-  asprintf( &ofile, "%s.smt", ifile );
-        ofile_h = fopen( ofile, "w" );
-  asprintf( &vfile, "%s.var", ifile );
-  vfile_h = fopen( vfile, "w" );
-        if(yyparse())
-        {       
-                printf("Error\n");
-                return 0;       
-        }
-        fclose(yyin);
-        fclose(ofile_h);
-  free( ofile );
-  free( vfile );
-  return 0;
+    yyin = fopen( ifile ,"r");
+
+    if(yyin==NULL) exit(-1);
+    
+    asprintf( &ofile, "%s.smt", ifile );
+    asprintf( &vfile, "%s.var", ifile );
+    if(yyparse())
+    {       
+        printf("Error\n");
+        exit(-1);       
+    }
+    fclose(yyin);
+    free( ofile );
+    free( vfile );
+    return 0;
 }
 
-int varcheck(char *var)
+int varcheck(DATA_expr_t *node)
 {
-  int i=0;
+  int i = 0;
   if(varcount>0)
   {
-    for(i=0;i<varcount;i++)
+    for( ; i<varcount; i++)
     {
-      if(!strcmp(varlist[i],var)) // Variable Name is already in list
-      return 0;
+      if( !strcmp(varlist[i].body, node->body) ) // Variable Name is already in list
+        return 0;
     }
   } 
-  varlist[i]=var;
+  /* varlist[i] = var; */
+  asprintf(&(varlist[i].body), "%s", node->body);
+  varlist[i].type = node->type;
   varcount++;
   return 1;
 }
 
 int vardef()
 {
+  /** TODO: change later
   int i=0;
   while(i<varcount-1)
   {
@@ -311,6 +329,8 @@ int vardef()
       i++;
   }
   fprintf(vfile_h, "%s", varlist[i]);
+  return 1;
+  */
   return 1;
 }
 
@@ -337,44 +357,42 @@ DATA_expr_t* FN_gen_exp(DATA_expr_t *nleft, DATA_expr_t *nright, int op_t)
     switch(op_t)
     {
     case TK_PL_OP:
-        asprintf(&exp, "(+ %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(+ %s %s)", nleft->body, nright->body);
         break;
     case TK_MI_OP:
-        asprintf(&exp, "(- %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(- %s %s)", nleft->body, nright->body);
         break;
     case TK_MU_OP:
-        asprintf(&exp, "(* %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(* %s %s)", nleft->body, nright->body);
         break;
     case TK_DI_OP:
-        asprintf(&exp, "(mod %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(mod %s %s)", nleft->body, nright->body);
         break;
     case TK_MO_OP:
-        asprintf(&exp, "(mod %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(mod %s %s)", nleft->body, nright->body);
         break;
     case TK_LT_OP:
-        asprintf(&exp, "(< %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(< %s %s)", nleft->body, nright->body);
         break;
     case TK_GT_OP:
-        asprintf(&exp, "(> %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(> %s %s)", nleft->body, nright->body);
         break;
     case TK_LE_OP:
-        asprintf(&exp, "(<= %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(<= %s %s)", nleft->body, nright->body);
         break;
     case TK_GE_OP:
-        asprintf(&exp, "(>= %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(>= %s %s)", nleft->body, nright->body);
         break;
     case TK_NE_OP:
-        asprintf(&exp, "(not (= %s %s))", nleft->body, rleft->body);
-        break;
-    case TK_IMP:
-        asprintf(&exp, "(=> %s %s)", nleft->body, rleft->body);
+        asprintf(&exp, "(not (= %s %s))", nleft->body, nright->body);
         break;
     default:
         printf("\nInvalid syntax: Operator no recognized!\n");
         exit(-1); break;
+    }
 
     free(nleft->body); free(nleft);
-    free(rleft->body); free(rleft);
+    free(nright->body); free(nright);
 
     return FN_mk_node(exp, NT_EXP);
 }
@@ -394,14 +412,15 @@ DATA_expr_t* FN_gen_impl(DATA_expr_t *ncond, DATA_expr_t *nbranch1, DATA_expr_t 
 
     if( nbranch2 == NULL )
     {
-        asprintf(&impl, "(ite %s %s (= 1 1))", ncond->body, nbranch1);
+        asprintf(&impl, "(ite %s %s (= 1 1))", ncond->body, nbranch1->body);
+        NODE_free(ncond); NODE_free(nbranch1);
     }
     else
     {
         asprintf(&impl, "(ite %s %s %s)", ncond->body, nbranch1->body, nbranch2->body);
+        NODE_free(ncond); NODE_free(nbranch1); NODE_free(nbranch2);
     }
 
-    NODE_free(ncond); NODE_free(nconclusion);
     return FN_mk_node(impl, NT_IMPL);
 }
 
@@ -417,4 +436,21 @@ void FN_write_node_to_file(DATA_expr_t *node, char *fname)
 {
     FILE *fname_h = fopen(fname, "w");
     fprintf(fname_h, "%s", node->body);
+}
+
+DATA_expr_t* FN_gen_exp_unary( DATA_expr_t *arg, int op_t)
+{
+    char *exp;
+
+    switch(op_t)
+    {
+    case TK_MI_OP:
+        asprintf(&exp, "(* -1 %s)", arg->body);
+        break;
+    default:
+        printf("\nInvalid Syntax: operator no recognized!\n");
+        break;
+    }
+    NODE_free(arg);
+    return FN_mk_node(exp, NT_EXP);
 }

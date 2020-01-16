@@ -776,12 +776,12 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 17 "smtlib.lex"
-{ yylval.identifier = strdup(yytext); return(TK_ID); }
+{ yylval.TK_identifier_t = strdup(yytext); return(TK_ID); }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
 #line 18 "smtlib.lex"
-{ yylval.literal    = strdup(yytext); return(TK_CT); }
+{ yylval.TK_literal_t    = strdup(yytext); return(TK_CT); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
