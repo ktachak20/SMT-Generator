@@ -12,7 +12,7 @@
 #define MAXVARS 100
 #define YYDEBUG 1
 
-#define NT_EXP_ARR  10
+#define NT_ARR_EXP  10
 #define NT_PST_EXP  11
 #define NT_UN_EXP   12
 #define NT_ASSN_EXP 13
@@ -38,7 +38,7 @@ extern void yyerror( const char * );
 
 extern int  FN_smtlib_parse( const char * );
 int         FN_vardef( void );
-int         FN_varcheck( DATA_expr_t * );
+void        FN_varcheck( DATA_expr_t * );
 char        *FN_mk_vdecl(char *, char *);
 DATA_expr_t *FN_mk_node( const char *, int );
 void        FN_write_node_to_file( DATA_expr_t *, char *);
@@ -154,6 +154,7 @@ postfix_expression: primary_expression
                         if( $1->type == TK_ID )
                         {
                           /* Check variable is already defined and set. */
+                          $1->type = NT_ARR_EXP;
                           FN_varcheck($1);
                         }
                   
@@ -330,7 +331,7 @@ int FN_smtlib_parse(const char *ifile )
     return 0;
 }
 
-int FN_varcheck(DATA_expr_t *node)
+void FN_varcheck(DATA_expr_t *node)
 {
   int i = 0;
 
@@ -341,7 +342,14 @@ int FN_varcheck(DATA_expr_t *node)
     {
       printf("DEBUG: no error FN_varcheck 2.%d.0\n", i);
       if( !strcmp(varlist[i]->body, node->body) ) // Variable Name is already in list
-        return 0;
+      {
+        if( varlist[i]->type != node->type )
+        {
+            printf("\nTypeError: Redefining a variable to different type!\n");
+            exit(-1);
+        }
+        return;
+      }
       printf("DEBUG: no error FN_varcheck 2.%d.1\n", i);
     }
   } 
@@ -350,7 +358,7 @@ int FN_varcheck(DATA_expr_t *node)
   varlist[i] = FN_mk_node(node->body, node->type);
   varcount++;
   printf("DEBUG: no error FN_varcheck 4\n");
-  return 1;
+  return;
 }
 
 char* FN_get_var_type(DATA_expr_t *v)
@@ -362,7 +370,7 @@ char* FN_get_var_type(DATA_expr_t *v)
     case TK_ID:
         asprintf(&type, "%s Int", v->body);
         break;
-    case NT_EXP_ARR:
+    case NT_ARR_EXP:
         asprintf(&type, "%s Array", v->body);
         break;
     default:
