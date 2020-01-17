@@ -6,7 +6,7 @@ D     [0-9]
 L     [a-zA-Z_]
 %{
 #include <stdio.h>
-#include "smtlib.tab.h" /* need to include while using yacc*/
+#include <smtlib.tab.h> /* need to include while using yacc*/
 %}
 
 %%

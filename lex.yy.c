@@ -492,7 +492,7 @@ copy the old string to the new string and return the new address.
 */
 #line 8 "smtlib.lex"
 #include <stdio.h>
-#include "smtlib.tab.h" /* need to include while using yacc*/
+#include <smtlib.tab.h> /* need to include while using yacc*/
 #line 497 "lex.yy.c"
 
 #define INITIAL 0

@@ -44,11 +44,14 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 53 "smtlib.y"
+#line 22 "smtlib.y"
 
+    #ifndef SMTLIB_DATA_EXP_T
+    #define SMTLIB_DATA_EXP_T
     typedef struct _DATA_expr_t DATA_expr_t;
+    #endif /* SMTLIB_DATA_EXP_T */
 
-#line 52 "smtlib.tab.h"
+#line 55 "smtlib.tab.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -90,14 +93,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 57 "smtlib.y"
+#line 29 "smtlib.y"
 
   int         TK_simple_t;
   char        *TK_literal_t;
   char        *TK_identifier_t;
   DATA_expr_t *NT_exp_t;
 
-#line 101 "smtlib.tab.h"
+#line 104 "smtlib.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

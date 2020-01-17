@@ -1,12 +1,13 @@
 if (  ( 0 + 1 * a - 1 * b <= 0 ) )
 {
  out = 0 + 1 * b + 1 * k2;
- out = a[0];
+ c[2] = out;
 
 }
 else if (  ( 0 + 1 * a - 1 * b > 0 ) )
 {
  out = 0 + 1 * a + 1 * k1; 
+ c[b] = out;
 
 }
 else
