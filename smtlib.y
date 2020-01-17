@@ -109,10 +109,12 @@ primary_expression
 postfix_expression: primary_expression
                     { 
                         printf("EXP: postfix 1\n");
+                        /** TODO: remove if working without
                         if( $1->type == TK_ID )
                         {
                             FN_varcheck($1);
                         }
+                        */
                         $$ = $1;
                     }
                   | postfix_expression TK_LSQB expression TK_RSQB
@@ -140,7 +142,10 @@ unary_operator
 
 unary_expression
   : postfix_expression
-    { printf("EXP: unary_exp \n"); $$ = $1; }
+    { printf("EXP: unary_exp \n");
+        if( $1->type == TK_ID ) FN_varcheck($1);
+        $$ = $1;
+    }
   | unary_operator unary_expression
     { printf("EXP: unary_exp \n"); $$ = FN_gen_exp_unary($2, $1->type); NODE_free($1); }
   ;

@@ -52,7 +52,7 @@ void FN_varcheck(DATA_expr_t *node)
       {
         if( VAR_P_LIST[i]->type != node->type )
         {
-            printf("\nTypeError: Redefining a variable to different type!\n");
+            printf("\nTypeError: Redefining a variable \"%s\" to different type!\n", VAR_P_LIST[i]->body);
             exit(-1);
         }
         return;
