@@ -75,40 +75,44 @@
 #define MAXVARS 100
 #define YYDEBUG 1
 
-#define NT_EXP_ARR  257
-#define NT_PST_EXP  258
-#define NT_UN_EXP   259
-#define NT_ASSN_EXP 260
-#define NT_ASSRT    261
-#define NT_EXP      262
-#define NT_CONJ     263
-#define NT_IMPL     264
+#define NT_EXP_ARR  10
+#define NT_PST_EXP  11
+#define NT_UN_EXP   12
+#define NT_ASSN_EXP 13
+#define NT_ASSRT    14
+#define NT_EXP      15
+#define NT_CONJ     16
+#define NT_IMPL     18
 
 #define NODE_free(n) \
-    free((n)->body); free(n);
+    free((n)->body); free(n)
 
 typedef struct _DATA_expr_t { char *body; int type; } DATA_expr_t;
 
 char        *ofile;
 char        *vfile;
-char        *x;
-char        *VR_vdec;              /* pointer to string of variable declarations. */
+int         varcount = 0;
+DATA_expr_t *varlist[MAXVARS]; /* variable names and associated type */
+
+extern int  yylex();
 extern int  yyparse();
 extern FILE *yyin;
-int         varcount = 0;
-DATA_expr_t varlist[MAXVARS]; /* variable names and associated type */
-int         vardef( void );
-int         varcheck( DATA_expr_t * );
-char*       FN_mk_vdecl(char *, char *);
-DATA_expr_t *FN_mk_node( char *, int );
+extern void yyerror( const char * );
+
+extern int  FN_smtlib_parse( const char * );
+int         FN_vardef( void );
+int         FN_varcheck( DATA_expr_t * );
+char        *FN_mk_vdecl(char *, char *);
+DATA_expr_t *FN_mk_node( const char *, int );
 void        FN_write_node_to_file( DATA_expr_t *, char *);
 DATA_expr_t *FN_gen_assert( DATA_expr_t *stmt );
 DATA_expr_t *FN_gen_impl( DATA_expr_t *ncond, DATA_expr_t *nbranch1, DATA_expr_t *nbranch2 );
 DATA_expr_t *FN_gen_conjunc( DATA_expr_t *nstart, DATA_expr_t *nend );
 DATA_expr_t *FN_gen_exp( DATA_expr_t *nleft, DATA_expr_t *nright, int op_t );
 DATA_expr_t *FN_gen_exp_unary( DATA_expr_t *, int );
+char        *FN_get_var_type( DATA_expr_t * );
 
-#line 112 "smtlib.tab.c"
+#line 116 "smtlib.tab.c"
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus
@@ -142,11 +146,11 @@ DATA_expr_t *FN_gen_exp_unary( DATA_expr_t *, int );
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 49 "smtlib.y"
+#line 53 "smtlib.y"
 
     typedef struct _DATA_expr_t DATA_expr_t;
 
-#line 150 "smtlib.tab.c"
+#line 154 "smtlib.tab.c"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -188,14 +192,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 53 "smtlib.y"
+#line 57 "smtlib.y"
 
   int         TK_simple_t;
   char        *TK_literal_t;
   char        *TK_identifier_t;
   DATA_expr_t *NT_exp_t;
 
-#line 199 "smtlib.tab.c"
+#line 203 "smtlib.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -503,12 +507,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   130,   130,   132,   137,   139,   157,   162,   164,   169,
-     170,   171,   172,   173,   177,   179,   184,   194,   199,   200,
-     201,   202,   203,   204,   205,   209,   213,   214,   215,   216,
-     219,   221,   223,   225,   229,   232,   233,   236,   237,   238,
-     239,   242,   243,   244,   247,   249,   253,   254,   261,   262,
-     271
+       0,   134,   134,   136,   140,   149,   167,   172,   174,   178,
+     184,   190,   196,   202,   211,   213,   218,   227,   232,   233,
+     234,   235,   236,   237,   238,   242,   246,   247,   248,   249,
+     252,   254,   256,   258,   262,   265,   266,   269,   270,   271,
+     272,   275,   276,   277,   280,   282,   286,   287,   294,   295,
+     304
 };
 #endif
 
@@ -1355,332 +1359,358 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 131 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node((yyvsp[0].TK_identifier_t), TK_ID); }
-#line 1361 "smtlib.tab.c"
+#line 135 "smtlib.y"
+    { printf("EXP: primary\n"); (yyval.NT_exp_t) = FN_mk_node((yyvsp[0].TK_identifier_t), TK_ID); }
+#line 1365 "smtlib.tab.c"
     break;
 
   case 3:
-#line 133 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node((yyvsp[0].TK_literal_t), TK_CT); }
-#line 1367 "smtlib.tab.c"
+#line 137 "smtlib.y"
+    { printf("EXP: primary\n"); (yyval.NT_exp_t) = FN_mk_node((yyvsp[0].TK_literal_t), TK_CT); }
+#line 1371 "smtlib.tab.c"
     break;
 
   case 4:
-#line 138 "smtlib.y"
-    { varcheck((yyvsp[0].NT_exp_t)); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
-#line 1373 "smtlib.tab.c"
+#line 141 "smtlib.y"
+    { 
+                        printf("EXP: postfix 1\n");
+                        if( (yyvsp[0].NT_exp_t)->type == TK_ID )
+                        {
+                            FN_varcheck((yyvsp[0].NT_exp_t));
+                        }
+                        (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t);
+                    }
+#line 1384 "smtlib.tab.c"
     break;
 
   case 5:
-#line 140 "smtlib.y"
-    { 
-      char *tmp;
-
-      if( (yyvsp[-3].NT_exp_t)->type == TK_ID )
-      {
-        /* Check variable is already defined and set. */
-        varcheck((yyvsp[-3].NT_exp_t));
-      }
-
-      asprintf(&tmp, "(select %s %s)", (yyvsp[-3].NT_exp_t)->body, (yyvsp[-1].NT_exp_t)->body);
-      (yyval.NT_exp_t) = FN_mk_node(tmp, NT_PST_EXP);
-      free((yyvsp[-3].NT_exp_t)->body); free((yyvsp[-1].NT_exp_t)->body);
-      free((yyvsp[-3].NT_exp_t)); free((yyvsp[-1].NT_exp_t));
-    }
-#line 1392 "smtlib.tab.c"
+#line 150 "smtlib.y"
+    {
+                        printf("EXP: postfix 2\n");
+                        char *tmp;
+                  
+                        if( (yyvsp[-3].NT_exp_t)->type == TK_ID )
+                        {
+                          /* Check variable is already defined and set. */
+                          FN_varcheck((yyvsp[-3].NT_exp_t));
+                        }
+                  
+                        asprintf(&tmp, "(select %s %s)", (yyvsp[-3].NT_exp_t)->body, (yyvsp[-1].NT_exp_t)->body);
+                        (yyval.NT_exp_t) = FN_mk_node(tmp, NT_PST_EXP);
+                        NODE_free((yyvsp[-3].NT_exp_t)); NODE_free((yyvsp[-1].NT_exp_t));
+                    }
+#line 1403 "smtlib.tab.c"
     break;
 
   case 6:
-#line 158 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("-", TK_MI_OP); }
-#line 1398 "smtlib.tab.c"
+#line 168 "smtlib.y"
+    { printf("EXP: unary_op \n"); (yyval.NT_exp_t) = FN_mk_node("-", TK_MI_OP); }
+#line 1409 "smtlib.tab.c"
     break;
 
   case 7:
-#line 163 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
-#line 1404 "smtlib.tab.c"
+#line 173 "smtlib.y"
+    { printf("EXP: unary_exp \n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1415 "smtlib.tab.c"
     break;
 
   case 8:
-#line 165 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_exp_unary((yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); }
-#line 1410 "smtlib.tab.c"
+#line 175 "smtlib.y"
+    { printf("EXP: unary_exp \n"); (yyval.NT_exp_t) = FN_gen_exp_unary((yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); }
+#line 1421 "smtlib.tab.c"
     break;
 
   case 9:
-#line 169 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("+", TK_PL_OP); }
-#line 1416 "smtlib.tab.c"
+#line 179 "smtlib.y"
+    { 
+                printf("EXP: op1 \n");
+                char *op; asprintf(&op, "+");
+                (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+            }
+#line 1431 "smtlib.tab.c"
     break;
 
   case 10:
-#line 170 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("-", TK_MI_OP); }
-#line 1422 "smtlib.tab.c"
+#line 185 "smtlib.y"
+    { 
+                printf("EXP: op2 \n");
+                char *op; asprintf(&op, "-");
+                (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+            }
+#line 1441 "smtlib.tab.c"
     break;
 
   case 11:
-#line 171 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("*", TK_MU_OP); }
-#line 1428 "smtlib.tab.c"
+#line 191 "smtlib.y"
+    { 
+                printf("EXP: op3 \n");
+                char *op; asprintf(&op, "*");
+                (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+            }
+#line 1451 "smtlib.tab.c"
     break;
 
   case 12:
-#line 172 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("div", TK_DI_OP); }
-#line 1434 "smtlib.tab.c"
+#line 197 "smtlib.y"
+    { 
+                printf("EXP: op4 \n");
+                char *op; asprintf(&op, "div");
+                (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+            }
+#line 1461 "smtlib.tab.c"
     break;
 
   case 13:
-#line 173 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("mod", TK_MO_OP); }
-#line 1440 "smtlib.tab.c"
+#line 203 "smtlib.y"
+    { 
+                printf("EXP: op5 \n");
+                char *op; asprintf(&op, "mod");
+                (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+            }
+#line 1471 "smtlib.tab.c"
     break;
 
   case 14:
-#line 178 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
-#line 1446 "smtlib.tab.c"
+#line 212 "smtlib.y"
+    { printf("EXP: exp1\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1477 "smtlib.tab.c"
     break;
 
   case 15:
-#line 180 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_exp((yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); }
-#line 1452 "smtlib.tab.c"
+#line 214 "smtlib.y"
+    { printf("EXP: exp2\n"); (yyval.NT_exp_t) = FN_gen_exp((yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); printf("EXP: exp2.1\n"); }
+#line 1483 "smtlib.tab.c"
     break;
 
   case 16:
-#line 185 "smtlib.y"
-    {
+#line 219 "smtlib.y"
+    {printf("EXP: assn_exp \n");
         char *exp;
 
         asprintf(&exp, "(= %s %s)", (yyvsp[-2].NT_exp_t)->body, (yyvsp[0].NT_exp_t)->body);
         (yyval.NT_exp_t) = FN_mk_node(exp, NT_ASSN_EXP);
 
-        free((yyvsp[-2].NT_exp_t)->body); free((yyvsp[-2].NT_exp_t));
-        free((yyvsp[0].NT_exp_t)->body); free((yyvsp[0].NT_exp_t)); /* replace with a macro */
+        NODE_free((yyvsp[-2].NT_exp_t)); NODE_free((yyvsp[0].NT_exp_t));
     }
-#line 1466 "smtlib.tab.c"
-    break;
-
-  case 17:
-#line 195 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
-#line 1472 "smtlib.tab.c"
-    break;
-
-  case 18:
-#line 199 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("<", TK_LT_OP); }
-#line 1478 "smtlib.tab.c"
-    break;
-
-  case 19:
-#line 200 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node(">", TK_GT_OP); }
-#line 1484 "smtlib.tab.c"
-    break;
-
-  case 20:
-#line 201 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("<=", TK_LE_OP); }
-#line 1490 "smtlib.tab.c"
-    break;
-
-  case 21:
-#line 202 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node(">=", TK_GE_OP); }
 #line 1496 "smtlib.tab.c"
     break;
 
-  case 22:
-#line 203 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("=", TK_GE_OP); }
+  case 17:
+#line 228 "smtlib.y"
+    { printf("EXP: assn_exp \n"); (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
 #line 1502 "smtlib.tab.c"
     break;
 
-  case 23:
-#line 204 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("neq", TK_NE_OP); }
+  case 18:
+#line 232 "smtlib.y"
+    {printf("EXP: rel_op1 \n"); char *op; asprintf(&op, "<"); (yyval.NT_exp_t) = FN_mk_node(op, TK_LT_OP); }
 #line 1508 "smtlib.tab.c"
     break;
 
-  case 24:
-#line 205 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("=", TK_NE_OP); }
+  case 19:
+#line 233 "smtlib.y"
+    {printf("EXP: rel_op2 \n"); char *op; asprintf(&op, ">"); (yyval.NT_exp_t) = FN_mk_node(op, TK_GT_OP); }
 #line 1514 "smtlib.tab.c"
     break;
 
-  case 25:
-#line 210 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_exp((yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); }
+  case 20:
+#line 234 "smtlib.y"
+    {printf("EXP: rel_op3 \n"); char *op; asprintf(&op, "<="); (yyval.NT_exp_t) = FN_mk_node(op, TK_LE_OP); }
 #line 1520 "smtlib.tab.c"
     break;
 
-  case 26:
-#line 213 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("and", TK_AND_OP); }
+  case 21:
+#line 235 "smtlib.y"
+    {printf("EXP: rel_op4 \n"); char *op; asprintf(&op, ">="); (yyval.NT_exp_t) = FN_mk_node(op, TK_GE_OP); }
 #line 1526 "smtlib.tab.c"
     break;
 
-  case 27:
-#line 214 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("or", TK_OR_OP); }
+  case 22:
+#line 236 "smtlib.y"
+    {printf("EXP: rel_op5 \n"); char *op; asprintf(&op, "="); (yyval.NT_exp_t) = FN_mk_node(op, TK_GE_OP); }
 #line 1532 "smtlib.tab.c"
     break;
 
-  case 28:
-#line 215 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("=>", TK_IMP_OP); }
+  case 23:
+#line 237 "smtlib.y"
+    {printf("EXP: rel_op6 \n"); char *op; asprintf(&op, "!="); (yyval.NT_exp_t) = FN_mk_node(op, TK_NE_OP); }
 #line 1538 "smtlib.tab.c"
     break;
 
-  case 29:
-#line 216 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_mk_node("=", TK_EQ_OP); }
+  case 24:
+#line 238 "smtlib.y"
+    {printf("EXP: rel_op7 \n"); char *op; asprintf(&op, "="); (yyval.NT_exp_t) = FN_mk_node(op, TK_NE_OP); }
 #line 1544 "smtlib.tab.c"
     break;
 
-  case 30:
-#line 220 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+  case 25:
+#line 243 "smtlib.y"
+    { printf("EXP: prim_cond_exp1\n"); (yyval.NT_exp_t) = FN_gen_exp((yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); }
 #line 1550 "smtlib.tab.c"
     break;
 
-  case 31:
-#line 222 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_exp_unary((yyvsp[0].NT_exp_t), TK_NOT_OP); }
+  case 26:
+#line 246 "smtlib.y"
+    { printf("EXP: log_op1\n"); (yyval.NT_exp_t) = FN_mk_node("and", TK_AND_OP); }
 #line 1556 "smtlib.tab.c"
     break;
 
-  case 32:
-#line 224 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_exp((yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); }
+  case 27:
+#line 247 "smtlib.y"
+    { printf("EXP: log_op1\n"); (yyval.NT_exp_t) = FN_mk_node("or", TK_OR_OP); }
 #line 1562 "smtlib.tab.c"
     break;
 
-  case 33:
-#line 226 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+  case 28:
+#line 248 "smtlib.y"
+    { printf("EXP: log_op1\n"); (yyval.NT_exp_t) = FN_mk_node("=>", TK_IMP_OP); }
 #line 1568 "smtlib.tab.c"
     break;
 
-  case 34:
-#line 229 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+  case 29:
+#line 249 "smtlib.y"
+    { printf("EXP: log_op1\n"); (yyval.NT_exp_t) = FN_mk_node("=", TK_EQ_OP); }
 #line 1574 "smtlib.tab.c"
     break;
 
-  case 35:
-#line 232 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+  case 30:
+#line 253 "smtlib.y"
+    { printf("EXP: cond_exp1\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
 #line 1580 "smtlib.tab.c"
     break;
 
-  case 36:
-#line 233 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_conjunc((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t)); }
+  case 31:
+#line 255 "smtlib.y"
+    { printf("EXP: cond_exp2\n"); (yyval.NT_exp_t) = FN_gen_exp_unary((yyvsp[0].NT_exp_t), TK_NOT_OP); }
 #line 1586 "smtlib.tab.c"
     break;
 
-  case 37:
-#line 236 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+  case 32:
+#line 257 "smtlib.y"
+    { printf("EXP: cond_exp3\n"); (yyval.NT_exp_t) = FN_gen_exp((yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t), (yyvsp[-1].NT_exp_t)->type); NODE_free((yyvsp[-1].NT_exp_t)); }
 #line 1592 "smtlib.tab.c"
     break;
 
-  case 38:
-#line 237 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+  case 33:
+#line 259 "smtlib.y"
+    { printf("EXP: cond_exp4\n"); (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
 #line 1598 "smtlib.tab.c"
     break;
 
-  case 39:
-#line 238 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_conjunc((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t)); }
+  case 34:
+#line 262 "smtlib.y"
+    { printf("EXP: assn_st1\n"); (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
 #line 1604 "smtlib.tab.c"
     break;
 
-  case 40:
-#line 239 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_conjunc((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t)); }
+  case 35:
+#line 265 "smtlib.y"
+    { printf("EXP: assn1\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
 #line 1610 "smtlib.tab.c"
     break;
 
-  case 41:
-#line 242 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+  case 36:
+#line 266 "smtlib.y"
+    { printf("EXP: assn2\n"); (yyval.NT_exp_t) = FN_gen_conjunc((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t)); }
 #line 1616 "smtlib.tab.c"
     break;
 
-  case 42:
-#line 243 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+  case 37:
+#line 269 "smtlib.y"
+    { printf("EXP: mix_st1\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
 #line 1622 "smtlib.tab.c"
     break;
 
-  case 43:
-#line 244 "smtlib.y"
-    { (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+  case 38:
+#line 270 "smtlib.y"
+    { printf("EXP: mix_st2\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
 #line 1628 "smtlib.tab.c"
     break;
 
-  case 44:
-#line 248 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_impl((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t), NULL); }
+  case 39:
+#line 271 "smtlib.y"
+    { printf("EXP: mix_st3\n"); (yyval.NT_exp_t) = FN_gen_conjunc((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t)); }
 #line 1634 "smtlib.tab.c"
     break;
 
-  case 45:
-#line 250 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_impl((yyvsp[-3].NT_exp_t), (yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t)); }
+  case 40:
+#line 272 "smtlib.y"
+    { printf("EXP: mix_st4\n"); (yyval.NT_exp_t) = FN_gen_conjunc((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t)); }
 #line 1640 "smtlib.tab.c"
     break;
 
-  case 46:
-#line 253 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_assert((yyvsp[0].NT_exp_t)); }
+  case 41:
+#line 275 "smtlib.y"
+    { printf("EXP: innblock1\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
 #line 1646 "smtlib.tab.c"
     break;
 
+  case 42:
+#line 276 "smtlib.y"
+    { printf("EXP: innblock2\n"); (yyval.NT_exp_t) = (yyvsp[0].NT_exp_t); }
+#line 1652 "smtlib.tab.c"
+    break;
+
+  case 43:
+#line 277 "smtlib.y"
+    { printf("EXP: innblock3\n"); (yyval.NT_exp_t) = (yyvsp[-1].NT_exp_t); }
+#line 1658 "smtlib.tab.c"
+    break;
+
+  case 44:
+#line 281 "smtlib.y"
+    { printf("EXP: deci1\n"); (yyval.NT_exp_t) = FN_gen_impl((yyvsp[-1].NT_exp_t), (yyvsp[0].NT_exp_t), NULL); }
+#line 1664 "smtlib.tab.c"
+    break;
+
+  case 45:
+#line 283 "smtlib.y"
+    { printf("EXP: deci2\n"); (yyval.NT_exp_t) = FN_gen_impl((yyvsp[-3].NT_exp_t), (yyvsp[-2].NT_exp_t), (yyvsp[0].NT_exp_t)); }
+#line 1670 "smtlib.tab.c"
+    break;
+
+  case 46:
+#line 286 "smtlib.y"
+    { printf("EXP: asst1\n"); (yyval.NT_exp_t) = FN_gen_assert((yyvsp[0].NT_exp_t)); }
+#line 1676 "smtlib.tab.c"
+    break;
+
   case 47:
-#line 255 "smtlib.y"
-    {
+#line 288 "smtlib.y"
+    {printf("EXP: asst2\n");
                 char *assrt;
-                asprintf(&assrt, "(assert %s)\n%s)", (yyvsp[-1].NT_exp_t)->body, (yyvsp[0].NT_exp_t)->body);
+                asprintf(&assrt, "(assert %s)\n%s", (yyvsp[-1].NT_exp_t)->body, (yyvsp[0].NT_exp_t)->body);
                 NODE_free((yyvsp[-1].NT_exp_t)); NODE_free((yyvsp[0].NT_exp_t));
                 (yyval.NT_exp_t) = FN_mk_node(assrt, NT_ASSRT);
             }
-#line 1657 "smtlib.tab.c"
+#line 1687 "smtlib.tab.c"
     break;
 
   case 48:
-#line 261 "smtlib.y"
-    { (yyval.NT_exp_t) = FN_gen_assert((yyvsp[0].NT_exp_t)); }
-#line 1663 "smtlib.tab.c"
+#line 294 "smtlib.y"
+    { printf("EXP: asst3\n"); (yyval.NT_exp_t) = FN_gen_assert((yyvsp[0].NT_exp_t)); }
+#line 1693 "smtlib.tab.c"
     break;
 
   case 49:
-#line 263 "smtlib.y"
-    {
+#line 296 "smtlib.y"
+    {printf("EXP: asst4\n");
                 char *assrt;
-                asprintf(&assrt, "(assert %s)\n%s)", (yyvsp[-1].NT_exp_t)->body, (yyvsp[0].NT_exp_t)->body);
+                asprintf(&assrt, "(assert %s)\n%s", (yyvsp[-1].NT_exp_t)->body, (yyvsp[0].NT_exp_t)->body);
                 NODE_free((yyvsp[-1].NT_exp_t)); NODE_free((yyvsp[0].NT_exp_t));
                 (yyval.NT_exp_t) = FN_mk_node(assrt, NT_ASSRT);
             }
-#line 1674 "smtlib.tab.c"
+#line 1704 "smtlib.tab.c"
     break;
 
   case 50:
-#line 272 "smtlib.y"
-    { vardef(); FN_write_node_to_file((yyvsp[0].NT_exp_t), ofile); NODE_free((yyvsp[0].NT_exp_t)); }
-#line 1680 "smtlib.tab.c"
+#line 305 "smtlib.y"
+    { printf("EXP: smtlib\n"); FN_vardef(); FN_write_node_to_file((yyvsp[0].NT_exp_t), ofile); NODE_free((yyvsp[0].NT_exp_t)); }
+#line 1710 "smtlib.tab.c"
     break;
 
 
-#line 1684 "smtlib.tab.c"
+#line 1714 "smtlib.tab.c"
 
       default: break;
     }
@@ -1912,29 +1942,25 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 275 "smtlib.y"
+#line 308 "smtlib.y"
 
 
-/** TODO: change later
 void yyerror (char const *s) {
    fprintf (stderr, "%s\n", s);
-   exit(0);
 }
-*/
 
-
-int callSMTLIBparser( char *ifile )
+int FN_smtlib_parse(const char *ifile )
 {       
     yyin = fopen( ifile ,"r");
 
-    if(yyin==NULL) exit(-1);
+    if(yyin==NULL) return -1;
     
     asprintf( &ofile, "%s.smt", ifile );
     asprintf( &vfile, "%s.var", ifile );
     if(yyparse())
     {       
         printf("Error\n");
-        exit(-1);       
+        return -1;
     }
     fclose(yyin);
     free( ofile );
@@ -1942,43 +1968,82 @@ int callSMTLIBparser( char *ifile )
     return 0;
 }
 
-int varcheck(DATA_expr_t *node)
+int FN_varcheck(DATA_expr_t *node)
 {
   int i = 0;
-  if(varcount>0)
+
+  printf("DEBUG: no error FN_varcheck 1\n");
+  if( varcount > 0 )
   {
-    for( ; i<varcount; i++)
+    for( ; i < varcount ; i++ )
     {
-      if( !strcmp(varlist[i].body, node->body) ) // Variable Name is already in list
+      printf("DEBUG: no error FN_varcheck 2.%d.0\n", i);
+      if( !strcmp(varlist[i]->body, node->body) ) // Variable Name is already in list
         return 0;
+      printf("DEBUG: no error FN_varcheck 2.%d.1\n", i);
     }
   } 
   /* varlist[i] = var; */
-  asprintf(&(varlist[i].body), "%s", node->body);
-  varlist[i].type = node->type;
+  printf("DEBUG: no error FN_varcheck 3\n");
+  varlist[i] = FN_mk_node(node->body, node->type);
   varcount++;
+  printf("DEBUG: no error FN_varcheck 4\n");
   return 1;
 }
 
-int vardef()
+char* FN_get_var_type(DATA_expr_t *v)
 {
-  /** TODO: change later
-  int i=0;
-  while(i<varcount-1)
+    char *type;
+
+    switch(v->type)
+    {
+    case TK_ID:
+        asprintf(&type, "%s Int", v->body);
+        break;
+    case NT_EXP_ARR:
+        asprintf(&type, "%s Array", v->body);
+        break;
+    default:
+        printf("\nDEBUG: %s, of type %d\n", v->body, v->type);
+        printf("TypeError: Unknown type declared!\n");
+        exit(-1);
+        break;
+    }
+    return type;
+}
+
+int FN_vardef()
+{
+  int i = 0;
+  char *vmap;
+
+  FILE *vfile_h = fopen(vfile, "w");
+  printf("DEBUG: FN_vardef, variable file %s\n", vfile);
+  while( i<varcount-1 )
   {
-      fprintf(vfile_h,"%s ",varlist[i]);
+      printf("DEBUG: no error in FN_vardef 0.0\n");
+      vmap = FN_get_var_type(varlist[i]);
+      printf("DEBUG: no error in FN_vardef 0.1\n");
+      fprintf(vfile_h, "%s\n", vmap);
+      printf("DEBUG: no error in FN_vardef 0.2\n");
+      NODE_free(varlist[i]);
+      printf("DEBUG: no error in FN_vardef 0.3\n");
       i++;
   }
-  fprintf(vfile_h, "%s", varlist[i]);
-  return 1;
-  */
+  printf("DEBUG: no error in FN_vardef 1\n");
+  vmap = FN_get_var_type(varlist[i]);
+  printf("DEBUG: no error in FN_vardef 2\n");
+  fprintf(vfile_h, "%s\n", vmap);
+  printf("DEBUG: no error in FN_vardef 3\n");
+  NODE_free(varlist[i]);
+  printf("DEBUG: no error in FN_vardef 4\n");
   return 1;
 }
 
-DATA_expr_t* FN_mk_node(char *s, int type)
+DATA_expr_t* FN_mk_node(const char *s, int type)
 {
   DATA_expr_t *node = malloc(sizeof(DATA_expr_t));
-  node->body = s;
+  asprintf(&(node->body), "%s", s);
   node->type = type;
 
   return node;
@@ -2032,8 +2097,9 @@ DATA_expr_t* FN_gen_exp(DATA_expr_t *nleft, DATA_expr_t *nright, int op_t)
         exit(-1); break;
     }
 
-    free(nleft->body); free(nleft);
-    free(nright->body); free(nright);
+    printf("DEBUG: no error FN_gen_exp 1\n");
+    NODE_free(nleft); NODE_free(nright);
+    printf("DEBUG: no error FN_gen_exp 2\n");
 
     return FN_mk_node(exp, NT_EXP);
 }
@@ -2069,13 +2135,17 @@ DATA_expr_t* FN_gen_assert(DATA_expr_t *stmt)
 {
     char *assert;
     asprintf(&assert, "(assert %s)", stmt->body);
+    printf("DEBUG: no error FN_gen_assert1\n");
     NODE_free(stmt);
+    printf("DEBUG: no error FN_gen_assert2\n");
     return FN_mk_node(assert, NT_ASSRT);
 }
 
 void FN_write_node_to_file(DATA_expr_t *node, char *fname)
 {
+    printf("DEBUG: no error FN_write_node_to_file 1\n");
     FILE *fname_h = fopen(fname, "w");
+    printf("DEBUG: no error FN_write_node_to_file 2\n");
     fprintf(fname_h, "%s", node->body);
 }
 

@@ -1,3 +1,8 @@
+#include <stdio.h>
+
+extern int FN_smtlib_parse( const char * );
+
+
 int main( int argc, char **argv )
 {
   if( argc != 2 )
@@ -6,7 +11,5 @@ int main( int argc, char **argv )
     return -1;
   }
 
-  callSMTLIBparser( argv[1] );
-
-  return 0;
+  return FN_smtlib_parse( argv[1] );
 }

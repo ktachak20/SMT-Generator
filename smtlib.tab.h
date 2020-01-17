@@ -44,7 +44,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 49 "smtlib.y"
+#line 53 "smtlib.y"
 
     typedef struct _DATA_expr_t DATA_expr_t;
 
@@ -90,7 +90,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 53 "smtlib.y"
+#line 57 "smtlib.y"
 
   int         TK_simple_t;
   char        *TK_literal_t;
