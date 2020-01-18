@@ -14,6 +14,9 @@
 #define NODE_free(n) \
     free((n)->body); free(n)
 
+#define PRINT_DEBUG(fmt, ...) \
+    printf("DEBUG: " #fmt "\n", ##__VA_ARGS__)
+
 
 typedef struct _DATA_expr_t { char *body; int type; } DATA_expr_t;
 
@@ -21,7 +24,7 @@ typedef struct _DATA_expr_t { char *body; int type; } DATA_expr_t;
 extern int  FN_smtlib_parse( const char * );
 int         FN_vardef( void );
 void        FN_varcheck( DATA_expr_t * );
-char        *FN_mk_vdecl(char *, char *);
+/* char        *FN_mk_vdecl(char *, char *); */
 DATA_expr_t *FN_mk_node( const char *, int );
 void        FN_write_node_to_file( DATA_expr_t * );
 DATA_expr_t *FN_gen_assert( DATA_expr_t *stmt );
