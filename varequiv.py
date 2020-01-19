@@ -6,7 +6,6 @@ from __future__ import print_function
 import sys
 import argparse
 
-from collections import OrderedDict
 
 DEC_CONST = '(declare-const {} {})\n'
 ASSERT    = '(assert {})\n'
@@ -16,13 +15,23 @@ EQ        = '(= {} {})'
 FLGV      = 'm_{}_{}'
 OR        = '(or {} {})'
 
+D_TYPES = { 'Int': '(declare-const {} Int)\n',
+            'Array': '(declare-const {} (Array Int Int))\n',}
+
 
 def create_check_01(op1):
   eqs = [EQ.format(op1, i) for i in '01']
   return ASSERT.format(OR.format(eqs[0], eqs[1]))
 
+def read_type(type_file):
+    with open(type_file, 'r') as f:
+        vtypes = []
+        for line in f.readlines():
+            vtypes.append(tuple(line.split()))
+        return vtypes
+
 def decl_vars(vlist, comment=';; Variable declarations.\n'):
-  return comment + ''.join(DEC_CONST.format(v, 'Int') for v in vlist)
+  return comment + ''.join(D_TYPES[t].format(v) for v,t in vlist)
   
 def check_flags_01(flags, comment=';; Check flags are either 0 or 1.\n'):
   return comment + ''.join(create_check_01(f) for f in flags)
@@ -45,7 +54,7 @@ def reg2var_map(regs, vars, comment=';; Register to variable mapping.\n'):
   for r in regs:
     mstr = ''
     for v in vars:
-      flg = FLGV.format(r,v)
+      flg = FLGV.format(v,r)
       if mstr == '':
         mstr = flg
       else:
@@ -105,9 +114,12 @@ def main(argspecs):
   args = (mk_parser(description, *argspecs)).parse_args()
   (cvars_input, cvars_intr,
    hvars_input, hvars_intr) = get_vars(args.vfile)
-  flags = [FLGV.format(v,r) for v in cvars_intr for r in hvars_intr]
+  flags = [(FLGV.format(v,r), 'Int') for v in cvars_intr for r in hvars_intr]
 
-  declarations = decl_vars(cvars_input+cvars_intr+hvars_input+hvars_intr+flags)
+  vfile, hfile = ( args.csmt.split('.smt')[0]+'.var',
+                   args.hsmt.split('.smt')[0]+'.var' )
+  vtype, htype = read_type(vfile), read_type(hfile)
+  declarations = decl_vars(vtype+htype+flags)
   mappings = value_mappings(cvars_intr, hvars_intr)
   assignments = val_reg_ass(cvars_input, hvars_input)
 

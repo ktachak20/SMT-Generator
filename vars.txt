@@ -1,4 +1,4 @@
-a b out 
-a b out 
-k2 k1
-k2 k1
+a b c
+r1 r2 r3
+k2 k1 out
+r4 r5 r6
