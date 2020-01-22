@@ -1,21 +1,23 @@
 # SMT Generator
 
-Generates smt code from c source. Currently supports simple statements, decisions and arrays.
+Generates smt code from c source. Currently supports simple statements,
+decisions and arrays.
 
-Since, variable declarations are not supported currently there is no means of differentiating between input, interior, and output variables. Hence the task is a 3 step process as given below:
+Since, variable declarations are not supported currently there is no means
+of differentiating between input, interior, and output variables. Hence the
+task is a 3 step process as given below:
+1. generate Z3 smt code usrin the executable generated from `main.c`.
+This step will generate Z3 SMT program with no declarations and a `.var`
+containing the variable names and types.
 
-    1. generate Z3 smt code usrin the executable generated from `main.c`.
-    This step will generate Z3 SMT program with no declarations and a `.var`
-    containing the variable names and types.
-    
-    2. To check variable equivalence, create a file containing four lines,
-    the first line is the list of input variables for the first c file, the
-    second line is the list of input variables for the second c file. The
-    third line is the list of interior variables for the first c file and the
-    last/fourth line is the list of interior variables for the second c file
-    respectively.
+2. To check variable equivalence, create a file containing four lines,
+the first line is the list of input variables for the first c file, the
+second line is the list of input variables for the second c file. The
+third line is the list of interior variables for the first c file and the
+last/fourth line is the list of interior variables for the second c file
+respectively.
 
-    3. Run the `varequiv.py` script passing in the appropriate arguments.
+3. Run the `varequiv.py` script passing in the appropriate arguments.
 
 ## Executables
   - `a.out` :: Generate SMT code from C program. Will generate two file, `inputfile.smt` and `inputfile.var`. `.var` file contains the list of variables used in the program.
@@ -50,4 +52,4 @@ Since, variable declarations are not supported currently there is no means of di
     ```
 
 ## Satisfiability and SMT model
-  Add ~(check-sat)~ and ~(get-model)~ at the end of ~outfile~.
+  Add `(check-sat)` and `(get-model)` at the end of `outfile`.
