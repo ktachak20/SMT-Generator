@@ -36,7 +36,8 @@ def decl_vars(vlist, comment=';; Variable declarations.\n'):
 def check_flags_01(flags, comment=';; Check flags are either 0 or 1.\n'):
   return comment + ''.join(create_check_01(f) for f in flags)
 
-def var2reg_map(vars, regs, comment=';; Variable to register mapping.\n'):
+def var2reg_map(vars, regs,
+        comment=';; Each variable is mapped to one register\n'):
   assertions = []
   for v in vars:
     mstr = ''
@@ -49,7 +50,8 @@ def var2reg_map(vars, regs, comment=';; Variable to register mapping.\n'):
     assertions.append(ASSERT.format(EQ.format(mstr, 1)))
   return comment + ''.join(assertions)
 
-def reg2var_map(regs, vars, comment=';; Register to variable mapping.\n'):
+def reg2var_map(regs, vars,
+        comment=';; Each register is mapped to exactly one variable.\n'):
   assertions = []
   for r in regs:
     mstr = ''
@@ -120,10 +122,12 @@ def main(argspecs):
                    args.hsmt.split('.smt')[0]+'.var' )
   vtype, htype = read_type(vfile), read_type(hfile)
   declarations = decl_vars(vtype+htype+flags)
+  check_flags = check_flags_01(f[0] for f in flags)
   mappings = value_mappings(cvars_intr, hvars_intr)
   assignments = val_reg_ass(cvars_input, hvars_input)
 
-  write_str_list(args.out, [declarations, mappings, assignments])
+  write_str_list(args.out,
+          [declarations, check_flags, mappings, assignments])
   append_files(args.out, [args.csmt, args.hsmt], 'Program')
 
 

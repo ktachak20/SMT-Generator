@@ -1,47 +1,35 @@
 ;; Variable declarations.
 (declare-const a Int)
+(declare-const c Int)
 (declare-const b Int)
-(declare-const out Int)
-(declare-const k2 Int)
-(declare-const c (Array Int Int))
-(declare-const k1 Int)
+(declare-const r3 Int)
 (declare-const r1 Int)
 (declare-const r2 Int)
-(declare-const r3 Int)
-(declare-const r4 Int)
-(declare-const r5 (Array Int Int))
-(declare-const r7 Int)
-(declare-const m_k2_r4 Int)
-(declare-const m_k2_r5 Int)
-(declare-const m_k2_r6 Int)
-(declare-const m_k1_r4 Int)
-(declare-const m_k1_r5 Int)
-(declare-const m_k1_r6 Int)
-(declare-const m_out_r4 Int)
-(declare-const m_out_r5 Int)
-(declare-const m_out_r6 Int)
+(declare-const m_a_r3 Int)
+(declare-const m_a_r2 Int)
+(declare-const m_c_r3 Int)
+(declare-const m_c_r2 Int)
 
-;; Variable to register mapping.
-(assert (= (+ (+ m_k2_r4 m_k2_r5) m_k2_r6) 1))
-(assert (= (+ (+ m_k1_r4 m_k1_r5) m_k1_r6) 1))
-(assert (= (+ (+ m_out_r4 m_out_r5) m_out_r6) 1))
-;; Register to variable mapping.
-(assert (= (+ (+ m_k2_r4 m_k1_r4) m_out_r4) 1))
-(assert (= (+ (+ m_k2_r5 m_k1_r5) m_out_r5) 1))
-(assert (= (+ (+ m_k2_r6 m_k1_r6) m_out_r6) 1))
+;; Check flags are either 0 or 1.
+(assert (or (= m_a_r3 0) (= m_a_r3 1)))
+(assert (or (= m_a_r2 0) (= m_a_r2 1)))
+(assert (or (= m_c_r3 0) (= m_c_r3 1)))
+(assert (or (= m_c_r2 0) (= m_c_r2 1)))
+
+;; Each variable is mapped to one register
+(assert (= (+ m_a_r3 m_a_r2) 1))
+(assert (= (+ m_c_r3 m_c_r2) 1))
+;; Each register is mapped to exactly one variable.
+(assert (= (+ m_a_r3 m_c_r3) 1))
+(assert (= (+ m_a_r2 m_c_r2) 1))
 ;; Variable to values mapping.
-(assert (= k2 (+ (+ (* m_k2_r4 r4) (* m_k2_r5 r5)) (* m_k2_r6 r6))))
-(assert (= k1 (+ (+ (* m_k1_r4 r4) (* m_k1_r5 r5)) (* m_k1_r6 r6))))
-(assert (= out (+ (+ (* m_out_r4 r4) (* m_out_r5 r5)) (* m_out_r6 r6))))
+(assert (= a (+ (* m_a_r3 r3) (* m_a_r2 r2))))
+(assert (= c (+ (* m_c_r3 r3) (* m_c_r2 r2))))
 
 ;; Variable to register assignments.
-(assert (= a r1))
-(assert (= b r2))
-(assert (= c r3))
+(assert (= b r1))
 
 ;; Program 1
-(assert (ite (<= (+ 0 (+ 1 (+ a (+ 1 b)))) 0) (and (= out (+ 0 (+ 1 (+ b (+ 1 k2))))) (= (select c 2) out)) (ite (> (+ 0 (+ 1 (+ a (+ 1 b)))) 0) (and (= out (+ 0 (+ 1 (+ a (+ 1 k1))))) (= (select c b) out)) (= 1 1))))
+(assert (= a (* c b)))
 ;; Program 2
-(assert (ite (<= (+ 0 (+ 1 (+ r1 (+ 1 r2)))) 0) (and (= r3 (+ 0 (+ 1 (+ r2 (+ 1 r4))))) (= (select r5 2) r3)) (ite (> (+ 0 (+ 1 (+ r1 (+ 1 r2)))) 0) (and (= r3 (+ 0 (+ 1 (+ r1 (+ 1 r7))))) (= (select r5 r2) r3)) (= 1 1))))
-(check-sat)
-(get-model)
+(assert (= r3 (* r1 r2)))
