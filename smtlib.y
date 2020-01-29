@@ -99,8 +99,7 @@ extern void yyerror( const char * );
 
 %%
 
-primary_expression
-  : TK_ID
+primary_expression: TK_ID
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error primary");
@@ -150,8 +149,7 @@ postfix_expression: primary_expression
                     }
                   ;
 
-unary_operator
-  : TK_MI_OP
+unary_operator: TK_MI_OP
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error unary_op");
@@ -160,8 +158,7 @@ unary_operator
     }
   ;
 
-unary_expression
-  : postfix_expression
+unary_expression: postfix_expression
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error unary_exp 1");
@@ -196,7 +193,7 @@ operator: TK_PL_OP
               PRINT_DEBUG("no error op 2");
           #endif
               char *op; asprintf(&op, "-");
-              $$ = FN_mk_node(op, TK_PL_OP);
+              $$ = FN_mk_node(op, TK_MI_OP);
           }
         | TK_MU_OP
           { 
@@ -204,7 +201,7 @@ operator: TK_PL_OP
               PRINT_DEBUG("no error op 3");
           #endif
               char *op; asprintf(&op, "*");
-              $$ = FN_mk_node(op, TK_PL_OP);
+              $$ = FN_mk_node(op, TK_MU_OP);
           }
         | TK_DI_OP
           { 
@@ -212,7 +209,7 @@ operator: TK_PL_OP
               PRINT_DEBUG("no error op 4");
           #endif
               char *op; asprintf(&op, "div");
-              $$ = FN_mk_node(op, TK_PL_OP);
+              $$ = FN_mk_node(op, TK_DI_OP);
           }
         | TK_MO_OP
           { 
@@ -220,7 +217,7 @@ operator: TK_PL_OP
               PRINT_DEBUG("no error op 5");
           #endif
               char *op; asprintf(&op, "mod");
-              $$ = FN_mk_node(op, TK_PL_OP);
+              $$ = FN_mk_node(op, TK_MO_OP);
           }
         ;
 
@@ -327,8 +324,7 @@ relational_operator: TK_LT_OP
                      }
                    ;
 
-primary_conditional_expression
-  : expression relational_operator expression
+primary_conditional_expression: expression relational_operator expression
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error prim_cond_exp1");

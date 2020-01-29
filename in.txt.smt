@@ -1,1 +1,1 @@
-(assert (ite (<= (+ 0 (+ 1 (+ a (+ 1 b)))) 0) (and (= out (+ 0 (+ 1 (+ b (+ 1 k2))))) (= (select c 2) out)) (ite (> (+ 0 (+ 1 (+ a (+ 1 b)))) 0) (and (= out (+ 0 (+ 1 (+ a (+ 1 k1))))) (= (select c b) out)) (= 1 1))))
+(assert (= a (* c b)))

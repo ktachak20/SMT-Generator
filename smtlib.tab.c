@@ -476,12 +476,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   103,   103,   110,   119,   126,   154,   164,   172,   185,
-     193,   201,   209,   217,   227,   234,   247,   263,   272,   280,
-     288,   296,   304,   312,   320,   331,   340,   347,   354,   361,
-     370,   377,   384,   391,   400,   409,   416,   425,   432,   439,
-     446,   455,   462,   469,   478,   485,   494,   501,   511,   518,
-     530
+       0,   102,   102,   109,   118,   125,   152,   161,   169,   182,
+     190,   198,   206,   214,   224,   231,   244,   260,   269,   277,
+     285,   293,   301,   309,   317,   327,   336,   343,   350,   357,
+     366,   373,   380,   387,   396,   405,   412,   421,   428,   435,
+     442,   451,   458,   465,   474,   481,   490,   497,   507,   514,
+     526
 };
 #endif
 
@@ -1328,7 +1328,7 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 104 "smtlib.y"
+#line 103 "smtlib.y"
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error primary");
@@ -1339,7 +1339,7 @@ yyreduce:
     break;
 
   case 3:
-#line 111 "smtlib.y"
+#line 110 "smtlib.y"
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error primary");
@@ -1350,7 +1350,7 @@ yyreduce:
     break;
 
   case 4:
-#line 120 "smtlib.y"
+#line 119 "smtlib.y"
     { 
                     #ifdef DEBUG
                         PRINT_DEBUG("no error postfix 1");
@@ -1361,7 +1361,7 @@ yyreduce:
     break;
 
   case 5:
-#line 127 "smtlib.y"
+#line 126 "smtlib.y"
     {
                     #ifdef DEBUG
                         PRINT_DEBUG("no error postfix 2");
@@ -1390,7 +1390,7 @@ yyreduce:
     break;
 
   case 6:
-#line 155 "smtlib.y"
+#line 153 "smtlib.y"
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error unary_op");
@@ -1401,7 +1401,7 @@ yyreduce:
     break;
 
   case 7:
-#line 165 "smtlib.y"
+#line 162 "smtlib.y"
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error unary_exp 1");
@@ -1413,7 +1413,7 @@ yyreduce:
     break;
 
   case 8:
-#line 173 "smtlib.y"
+#line 170 "smtlib.y"
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error unary_exp 2");
@@ -1428,7 +1428,7 @@ yyreduce:
     break;
 
   case 9:
-#line 186 "smtlib.y"
+#line 183 "smtlib.y"
     { 
           #ifdef DEBUG
               PRINT_DEBUG("no error op 1");
@@ -1440,55 +1440,55 @@ yyreduce:
     break;
 
   case 10:
-#line 194 "smtlib.y"
+#line 191 "smtlib.y"
     { 
           #ifdef DEBUG
               PRINT_DEBUG("no error op 2");
           #endif
               char *op; asprintf(&op, "-");
-              (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+              (yyval.NT_exp_t) = FN_mk_node(op, TK_MI_OP);
           }
 #line 1452 "smtlib.tab.c"
     break;
 
   case 11:
-#line 202 "smtlib.y"
+#line 199 "smtlib.y"
     { 
           #ifdef DEBUG
               PRINT_DEBUG("no error op 3");
           #endif
               char *op; asprintf(&op, "*");
-              (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+              (yyval.NT_exp_t) = FN_mk_node(op, TK_MU_OP);
           }
 #line 1464 "smtlib.tab.c"
     break;
 
   case 12:
-#line 210 "smtlib.y"
+#line 207 "smtlib.y"
     { 
           #ifdef DEBUG
               PRINT_DEBUG("no error op 4");
           #endif
               char *op; asprintf(&op, "div");
-              (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+              (yyval.NT_exp_t) = FN_mk_node(op, TK_DI_OP);
           }
 #line 1476 "smtlib.tab.c"
     break;
 
   case 13:
-#line 218 "smtlib.y"
+#line 215 "smtlib.y"
     { 
           #ifdef DEBUG
               PRINT_DEBUG("no error op 5");
           #endif
               char *op; asprintf(&op, "mod");
-              (yyval.NT_exp_t) = FN_mk_node(op, TK_PL_OP);
+              (yyval.NT_exp_t) = FN_mk_node(op, TK_MO_OP);
           }
 #line 1488 "smtlib.tab.c"
     break;
 
   case 14:
-#line 228 "smtlib.y"
+#line 225 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error exp1");
@@ -1499,7 +1499,7 @@ yyreduce:
     break;
 
   case 15:
-#line 235 "smtlib.y"
+#line 232 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error exp2");
@@ -1514,7 +1514,7 @@ yyreduce:
     break;
 
   case 16:
-#line 248 "smtlib.y"
+#line 245 "smtlib.y"
     {
                        #ifdef DEBUG
                            PRINT_DEBUG("no error assn_exp");
@@ -1534,7 +1534,7 @@ yyreduce:
     break;
 
   case 17:
-#line 264 "smtlib.y"
+#line 261 "smtlib.y"
     {
                        #ifdef DEBUG
                            PRINT_DEBUG("no error assn_exp");
@@ -1545,7 +1545,7 @@ yyreduce:
     break;
 
   case 18:
-#line 273 "smtlib.y"
+#line 270 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op1");
@@ -1557,7 +1557,7 @@ yyreduce:
     break;
 
   case 19:
-#line 281 "smtlib.y"
+#line 278 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op2");
@@ -1569,7 +1569,7 @@ yyreduce:
     break;
 
   case 20:
-#line 289 "smtlib.y"
+#line 286 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op3");
@@ -1581,7 +1581,7 @@ yyreduce:
     break;
 
   case 21:
-#line 297 "smtlib.y"
+#line 294 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op4");
@@ -1593,7 +1593,7 @@ yyreduce:
     break;
 
   case 22:
-#line 305 "smtlib.y"
+#line 302 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op5");
@@ -1605,7 +1605,7 @@ yyreduce:
     break;
 
   case 23:
-#line 313 "smtlib.y"
+#line 310 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op6");
@@ -1617,7 +1617,7 @@ yyreduce:
     break;
 
   case 24:
-#line 321 "smtlib.y"
+#line 318 "smtlib.y"
     {
                      #ifdef DEBUG
                          PRINT_DEBUG("no error rel_op7");
@@ -1629,7 +1629,7 @@ yyreduce:
     break;
 
   case 25:
-#line 332 "smtlib.y"
+#line 328 "smtlib.y"
     {
     #ifdef DEBUG
         PRINT_DEBUG("no error prim_cond_exp1");
@@ -1640,7 +1640,7 @@ yyreduce:
     break;
 
   case 26:
-#line 341 "smtlib.y"
+#line 337 "smtlib.y"
     {
                   #ifdef DEBUG
                       PRINT_DEBUG("no error log_op1");
@@ -1651,7 +1651,7 @@ yyreduce:
     break;
 
   case 27:
-#line 348 "smtlib.y"
+#line 344 "smtlib.y"
     {
                   #ifdef DEBUG
                       PRINT_DEBUG("no error log_op1");
@@ -1662,7 +1662,7 @@ yyreduce:
     break;
 
   case 28:
-#line 355 "smtlib.y"
+#line 351 "smtlib.y"
     {
                   #ifdef DEBUG
                       PRINT_DEBUG("no error log_op1");
@@ -1673,7 +1673,7 @@ yyreduce:
     break;
 
   case 29:
-#line 362 "smtlib.y"
+#line 358 "smtlib.y"
     {
                   #ifdef DEBUG
                       PRINT_DEBUG("no error log_op1");
@@ -1684,7 +1684,7 @@ yyreduce:
     break;
 
   case 30:
-#line 371 "smtlib.y"
+#line 367 "smtlib.y"
     {
                         #ifdef DEBUG
                             PRINT_DEBUG("no error cond_exp1");
@@ -1695,7 +1695,7 @@ yyreduce:
     break;
 
   case 31:
-#line 378 "smtlib.y"
+#line 374 "smtlib.y"
     {
                         #ifdef DEBUG
                             PRINT_DEBUG("no error cond_exp2");
@@ -1706,7 +1706,7 @@ yyreduce:
     break;
 
   case 32:
-#line 385 "smtlib.y"
+#line 381 "smtlib.y"
     {
                         #ifdef DEBUG
                             PRINT_DEBUG("no error cond_exp3");
@@ -1717,7 +1717,7 @@ yyreduce:
     break;
 
   case 33:
-#line 392 "smtlib.y"
+#line 388 "smtlib.y"
     {
                         #ifdef DEBUG
                             PRINT_DEBUG("no error cond_exp4");
@@ -1728,7 +1728,7 @@ yyreduce:
     break;
 
   case 34:
-#line 401 "smtlib.y"
+#line 397 "smtlib.y"
     {
                       #ifdef DEBUG
                         PRINT_DEBUG("no error assn_st1");
@@ -1739,7 +1739,7 @@ yyreduce:
     break;
 
   case 35:
-#line 410 "smtlib.y"
+#line 406 "smtlib.y"
     {
              #ifdef DEBUG
                 PRINT_DEBUG("no error assn1");
@@ -1750,7 +1750,7 @@ yyreduce:
     break;
 
   case 36:
-#line 417 "smtlib.y"
+#line 413 "smtlib.y"
     {
              #ifdef DEBUG
                 PRINT_DEBUG("no error assn2");
@@ -1761,7 +1761,7 @@ yyreduce:
     break;
 
   case 37:
-#line 426 "smtlib.y"
+#line 422 "smtlib.y"
     {
                   #ifdef DEBUG
                     PRINT_DEBUG("no error mix_st1");
@@ -1772,7 +1772,7 @@ yyreduce:
     break;
 
   case 38:
-#line 433 "smtlib.y"
+#line 429 "smtlib.y"
     {
                   #ifdef DEBUG
                     PRINT_DEBUG("no error mix_st2");
@@ -1783,7 +1783,7 @@ yyreduce:
     break;
 
   case 39:
-#line 440 "smtlib.y"
+#line 436 "smtlib.y"
     {
                   #ifdef DEBUG
                     PRINT_DEBUG("no error mix_st3");
@@ -1794,7 +1794,7 @@ yyreduce:
     break;
 
   case 40:
-#line 447 "smtlib.y"
+#line 443 "smtlib.y"
     {
                   #ifdef DEBUG
                     PRINT_DEBUG("no error mix_st4");
@@ -1805,7 +1805,7 @@ yyreduce:
     break;
 
   case 41:
-#line 456 "smtlib.y"
+#line 452 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG(" innblock1");
@@ -1816,7 +1816,7 @@ yyreduce:
     break;
 
   case 42:
-#line 463 "smtlib.y"
+#line 459 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error innblock2");
@@ -1827,7 +1827,7 @@ yyreduce:
     break;
 
   case 43:
-#line 470 "smtlib.y"
+#line 466 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error innblock3");
@@ -1838,7 +1838,7 @@ yyreduce:
     break;
 
   case 44:
-#line 479 "smtlib.y"
+#line 475 "smtlib.y"
     {
           #ifdef DEBUG
             PRINT_DEBUG("no error deci1");
@@ -1849,7 +1849,7 @@ yyreduce:
     break;
 
   case 45:
-#line 486 "smtlib.y"
+#line 482 "smtlib.y"
     {
           #ifdef DEBUG
             PRINT_DEBUG("no error deci2");
@@ -1860,7 +1860,7 @@ yyreduce:
     break;
 
   case 46:
-#line 495 "smtlib.y"
+#line 491 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error asst1");
@@ -1871,7 +1871,7 @@ yyreduce:
     break;
 
   case 47:
-#line 502 "smtlib.y"
+#line 498 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error asst2");
@@ -1885,7 +1885,7 @@ yyreduce:
     break;
 
   case 48:
-#line 512 "smtlib.y"
+#line 508 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error asst3");
@@ -1896,7 +1896,7 @@ yyreduce:
     break;
 
   case 49:
-#line 519 "smtlib.y"
+#line 515 "smtlib.y"
     {
             #ifdef DEBUG
                 PRINT_DEBUG("no error asst4");
@@ -1910,7 +1910,7 @@ yyreduce:
     break;
 
   case 50:
-#line 531 "smtlib.y"
+#line 527 "smtlib.y"
     {
         #ifdef DEBUG
             PRINT_DEBUG("no error smtlib");
@@ -2153,7 +2153,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 539 "smtlib.y"
+#line 535 "smtlib.y"
 
 
 void yyerror (char const *s) {
