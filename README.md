@@ -35,7 +35,7 @@ respectively.
     
   - `varequiv.py` :: Generate SMT code for checking variable equivalence.
     ```
-    usage: varequiv.py [-h] -s CSMT -r HSMT -v VFILE [-o OUT]
+    usage: varequiv.py [-h] -s CSMT -r HSMT -v VFILE -o OUT [-t]
     
     Generate SMT program for checking equivalence of variables.
     
@@ -49,6 +49,7 @@ respectively.
                             File containing the list of variables.
       -o OUT, --outfile OUT
                             File where the output will be written
+      -t, --timeit          Print the running time.
     ```
 
 ## Satisfiability and SMT model
