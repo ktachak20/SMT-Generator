@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import sys
 import argparse
+import timeit
 
 
 DEC_CONST = '(declare-const {} {})\n'
@@ -92,10 +93,10 @@ def get_vars(vfile):
     varlists = [line.split() for line in f.readlines()]
     return varlists[0], varlists[2], varlists[1], varlists[3]
   
-def mk_parser(desc, flags, extflags, required, dest, help):
+def mk_parser(desc, flags, extflags, required, dest, actions, help):
   parser = argparse.ArgumentParser(description=desc)
-  for flg, extflg, rq, dst, hlp in zip(flags, extflags, required, dest, help):
-    parser.add_argument(flg, extflg, dest=dst, required=rq, help=hlp)
+  for flg, extflg, rq, dst, act, hlp in zip(flags, extflags, required, dest, actions, help):
+    parser.add_argument(flg, extflg, dest=dst, required=rq, action=act, help=hlp)
   return parser
 
 def write_str_list(fname, strlist):
@@ -112,34 +113,49 @@ def append_files(fname, fnamelist, headstr):
         ofile.write(infile.read())
         ofile.write('\n')
 
-def main(argspecs):
-  args = (mk_parser(description, *argspecs)).parse_args()
-  (cvars_input, cvars_intr,
-   hvars_input, hvars_intr) = get_vars(args.vfile)
-  flags = [(FLGV.format(v,r), 'Int') for v in cvars_intr for r in hvars_intr]
-
-  vfile, hfile = ( args.csmt.split('.smt')[0]+'.var',
-                   args.hsmt.split('.smt')[0]+'.var' )
+def convsmt(vfile, hfile, args, cvars_input, cvars_intr, hvars_input, hvars_intr):
+  flags = [(FLGV.format(v,r), 'Int')
+          for v in cvars_intr for r in hvars_intr]
   vtype, htype = read_type(vfile), read_type(hfile)
   declarations = decl_vars(vtype+htype+flags)
   check_flags = check_flags_01(f[0] for f in flags)
   mappings = value_mappings(cvars_intr, hvars_intr)
   assignments = val_reg_ass(cvars_input, hvars_input)
-
   write_str_list(args.out,
           [declarations, check_flags, mappings, assignments])
   append_files(args.out, [args.csmt, args.hsmt], 'Program')
 
+def main(argspecs):
+  args = (mk_parser(description, *argspecs)).parse_args()
+  (cvars_input, cvars_intr,
+   hvars_input, hvars_intr) = get_vars(args.vfile)
+  vfile, hfile = ( args.csmt.split('.smt')[0]+'.var',
+                   args.hsmt.split('.smt')[0]+'.var' )
+  csmt, hsmt = args.csmt, args.hsmt
+  if args.timeit:
+    timed_code = '''convsmt(vfile, hfile, args,
+    cvars_input, cvars_intr, hvars_input, hvars_intr,)'''
+    timed_globals = {'convsmt': convsmt, 'cvars_input': cvars_input,
+      'cvars_intr': cvars_intr, 'hvars_input': hvars_input, 'args': args,
+      'hvars_intr': hvars_intr, 'vfile': vfile, 'hfile': hfile}
+    print('Time:', timeit.timeit(stmt = timed_code,
+      globals=timed_globals, number=1), 'secs')
+  else:
+    convsmt(vfile, hfile, args, cvars_input, cvars_intr,
+    hvars_input, hvars_intr)
+
 
 if __name__ == '__main__':
   description = "Generate SMT program for checking equivalence of variables."
-  argflags    = ['-s', '-r', '-v', '-o']
-  extflags    = ['--cfile', '--hlsfile', '--vfile', '--outfile']
-  required    = [True, True, True, True]
-  dest        = ['csmt', 'hsmt', 'vfile', 'out']
+  argflags    = ['-s', '-r', '-v', '-o', '-t']
+  extflags    = ['--cfile', '--hlsfile', '--vfile', '--outfile', '--timeit']
+  required    = [True, True, True, True, False]
+  dest        = ['csmt', 'hsmt', 'vfile', 'out', 'timeit']
+  actions     = [None, None, None, None, 'store_true']
   help        = ['SMT program of the C source.',
                  'SMT of the HLS source.',
                  'File containing the list of variables.',
-                 'File where the output will be written']
-  argspecs    = [argflags, extflags, required, dest, help]
+                 'File where the output will be written',
+                 'Print the running time.']
+  argspecs    = [argflags, extflags, required, dest, actions, help]
   main(argspecs)
